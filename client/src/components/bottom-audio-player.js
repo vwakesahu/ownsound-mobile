@@ -1,4 +1,8 @@
 import { PauseIcon, PlayIcon } from "lucide-react";
+import { GiNextButton } from "react-icons/gi";
+import { GiPreviousButton } from "react-icons/gi";
+import { FaShuffle } from "react-icons/fa6";
+import { FaRepeat } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 
 export default function BottomAudioPlayer({ url = "/audio/sample-9s.mp3" }) {
@@ -94,18 +98,17 @@ export default function BottomAudioPlayer({ url = "/audio/sample-9s.mp3" }) {
       </div>
 
       <div className="flex items-center gap-2">
-        <button>
-          <img src="/icons-dark/shuffle-icon.png" className="w-6 h-6" />
-        </button>
-        <button>
-          <img src="/icons-dark/previous-icon.png" className="w-6 h-6" />
-        </button>
-        <button>
+        
+        <FaShuffle />
+        <GiPreviousButton />
+        <GiNextButton />
+        <FaRepeat />
+        {/* <button>
           <img src="/icons-dark/next-icon.png" className="w-6 h-6" />
         </button>
         <button>
           <img src="/icons-dark/loop-icon.png" className="w-6 h-6" />
-        </button>
+        </button> */}
       </div>
     </div>
   );
