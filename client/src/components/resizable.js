@@ -5,9 +5,17 @@ import {
 } from "@/components/ui/resizable";
 import Login from "./login";
 import { Badge } from "./ui/badge";
-import { ArrowLeftIcon, PauseIcon, PlayIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  PauseIcon,
+  PlayIcon,
+  PlugIcon,
+  PlusIcon,
+} from "lucide-react";
 import { audioTracks, playlists } from "@/utils/dummy";
 import { useState } from "react";
+import { Button } from "./ui/button";
+import PublishAudio from "./publish-audio";
 
 export function ResizableComponent({
   w0,
@@ -23,8 +31,18 @@ export function ResizableComponent({
   };
   return (
     <ResizablePanelGroup direction="horizontal">
-      <ResizablePanel defaultSize={150}>
-        <div className="flex items-center justify-center p-6">
+      <ResizablePanel defaultSize={50}>
+        <div className="flex items-center justify-between w-full p-6 dark:bg-muted/10 bg-muted border-b">
+          <p className="font-light">Own Sound</p>
+        </div>
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={120}>
+        <div className="p-6">
+          <div className="w-full flex items-center justify-end">
+            <PublishAudio />
+          </div>
+
           <span className="font-semibold">One</span>
         </div>
       </ResizablePanel>

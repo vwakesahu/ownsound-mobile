@@ -64,19 +64,3 @@ const Page = () => {
 };
 
 export default Page;
-
-const MusicList = ({ audioTracks, musicPlayer, setMusicPlayer }) => {
-  return (
-    <div className="flex gap-3 items-center">
-      <img
-        src={audioTracks[musicPlayer.index].cover}
-        alt="cover"
-        className="w-12 h-12 rounded-md"
-      />
-      <div>
-        <p className="font-semibold">{audioTracks[musicPlayer.index].title}</p>
-        <p className="text-sm">{audioTracks[musicPlayer.index].artist}</p>
-      </div>
-    </div>
-  );
-};
