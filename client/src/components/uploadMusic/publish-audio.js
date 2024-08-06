@@ -19,8 +19,13 @@ import Image from "next/image";
 import { MdDeleteForever } from "react-icons/md";
 import { UploadCloud, Percent } from "lucide-react";
 import axios from "axios";
+import { useWallets } from "@privy-io/react-auth";
+import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
+import { Contract } from "ethers";
 
 const PublishAudio = () => {
+  const { wallets } = useWallets();
+  const w0 = wallets[0];
   const [musicFile, setMusicFile] = useState(null);
   const [step, setStep] = useState(1);
   const [isRentingAllowed, setIsRentingAllowed] = useState(false);
@@ -67,19 +72,20 @@ const PublishAudio = () => {
         //   data.append("coverImage", coverImage);
         // }
 
-        const response = await axios.post(
-          "https://ownsound-qiim.vercel.app/endpoint",
-          data,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        // const response = await axios.post(
+        //   "https://ownsound-qiim.vercel.app/endpoint",
+        //   data,
+        //   {
+        //     headers: {
+        //       "Content-Type": "multipart/form-data",
+        //     },
+        //   }
+        // );
 
-        console.log("Response:", response.data);
+        // console.log("Response:", response.data);
 
         setMusicFile(file);
+        setFileName(file.name);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
@@ -115,32 +121,76 @@ const PublishAudio = () => {
   };
 
   const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append("songName", songName);
-    formData.append("songDescription", songDescription);
-    formData.append("basePrice", basePrice);
-    formData.append("royaltyPrice", royaltyPrice);
-    formData.append("royaltyPercentage", royaltyPercentage);
-    formData.append("isRentingAllowed", isRentingAllowed);
+    // const formData = new FormData();
+    // formData.append("songName", songName);
+    // formData.append("songDescription", songDescription);
+    // formData.append("basePrice", basePrice);
+    // formData.append("royaltyPrice", royaltyPrice);
+    // formData.append("royaltyPercentage", royaltyPercentage);
+    // formData.append("isRentingAllowed", isRentingAllowed);
 
-     if (musicFile) {
-       formData.append("musicFile", musicFile);
-     }
+    // if (musicFile) {
+    //   formData.append("musicFile", musicFile);
+    // }
 
-     if (imageSrc) {
-       formData.append("coverImage", imageSrc);
-     }
+    // if (imageSrc) {
+    //   formData.append("coverImage", imageSrc);
+    // }
 
-     // Log data for debugging
-     console.log("Form Data:");
-     for (const [key, value] of formData.entries()) {
-       console.log(`${key}: ${value}`);
-     }
+    // // Log data for debugging
+    // console.log("Form Data:");
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
 
-    // Handle the FormData, e.g., send it to an API
-    // const { data } = await axios.post("/api/upload", formData);
-    // console.log(data);
+    const dummyPayload = {
+      basePrice: basePrice,
+      fullRoyaltyAllowed: false,
+      fullRoyaltyBuyoutPrice: 1000,
+      title: songName,
+      description: songDescription,
+      coverImage:
+        "https://imageio.forbes.com/specials-images/imageserve/6170e01f8d7639b95a7f2eeb/Sotheby-s-NFT-Natively-Digital-1-2-sale-Bored-Ape-Yacht-Club--8817-by-Yuga-Labs/0x0.png?format=png&width=960",
+      mp3FileLocationId:
+        "bafybeic5zcykf7fpg7c2zuf76p2gddegxlt64hbfp76qqs7l4l6yx3nraa",
+      isRentingAllowed: isRentingAllowed,
+      supply: 1,
+      royaltyPercentage: royaltyPercentage,
+    };
+    try {
+      const provider = await w0?.getEthersProvider();
+      if (!provider) {
+        console.error("Provider is not available:", provider);
+        throw new Error("Provider is not available");
+      }
+
+      const signer = await provider.getSigner();
+      if (!signer) {
+        console.error("Signer is not available:", signer);
+        throw new Error("Signer is not available");
+      }
+
+      const contract = new Contract(
+        ownSoundContractAddress,
+        ownSoundContractABI,
+        signer
+      );
+
+      const res = await contract.createNFT(dummyPayload);
+      console.log(res);
+      // setSongs(res);
+      // setLoading(false);
+    } catch (error) {
+      console.error("Error fetching songs:", error);
+      // toast.error("Failed to fetch songs");
+      // setError(true);
+      // setLoading(false);
+    }
   };
+
+  // Handle the FormData, e.g., send it to an API
+  // const { data } = await axios.post("/api/upload", formData);
+  // console.log(data);
 
   return (
     <AlertDialog>

@@ -1,13 +1,68 @@
 import { PencilIcon } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { audioTracks, playlists } from "@/utils/dummy";
 import HorizontalScroll from "../horizontal-scroll";
 import { v4 as uuidv4 } from "uuid";
 import PublishAudio from "../uploadMusic/publish-audio";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { Contract } from "ethers";
+import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 
 const Profile = () => {
+  const { authenticated, ready } = usePrivy();
+  const { wallets } = useWallets();
+  const w0 = wallets[0];
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const getSongs = async (address) => {
+    if (!address) {
+      toast.error("Address is not provided");
+      setError(true);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const provider = await w0?.getEthersProvider();
+      if (!provider) {
+        console.error("Provider is not available:", provider);
+        throw new Error("Provider is not available");
+      }
+
+      const signer = await provider.getSigner();
+      if (!signer) {
+        console.error("Signer is not available:", signer);
+        throw new Error("Signer is not available");
+      }
+
+      const contract = new Contract(
+        ownSoundContractAddress,
+        ownSoundContractABI,
+        signer
+      );
+
+      const res = await contract.getWalletTokensWithMetadata(address);
+      console.log(res);
+      setSongs(res);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching songs:", error);
+      // toast.error("Failed to fetch songs");
+      setError(true);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (ready && authenticated && w0?.address !== undefined) {
+      console.log("Wallet Address: ", w0.address);
+      getSongs(w0.address);
+    }
+  }, [w0]);
+
   const renderTrackItem = (track) => (
     <>
       <div className="w-36 h-36">
