@@ -32,14 +32,59 @@ const PublishAudio = () => {
   const [royaltyPrice, setRoyaltyPrice] = useState("");
   const [royaltyPercentage, setRoyaltyPercentage] = useState("");
 
-  const handleFileUpload = (e) => {
+  const [formData, setFormData] = useState({
+    songName: "",
+    songDescription: "",
+    basePrice: "",
+    royaltyPrice: "",
+    royaltyPercentage: "",
+    isRentingAllowed: false,
+  });
+  const handleFileUpload = async (e) => {
+    const formData = {
+      songName: "",
+      songDescription: "",
+      basePrice: "",
+      royaltyPrice: "",
+      royaltyPercentage: "",
+      isRentingAllowed: false,
+    };
     const file = e.target.files[0];
     if (file) {
-      setMusicFile(file);
-      setFileName(file.name);
+      try {
+        const data = new FormData();
+
+        // Append text fields
+        Object.keys(formData).forEach((key) => {
+          data.append(key, formData[key]);
+        });
+
+        // Append music file
+        data.append("musicFile", file);
+
+        // Append cover image if it exists
+        // if (coverImage) {
+        //   data.append("coverImage", coverImage);
+        // }
+
+        const response = await axios.post(
+          "https://ownsound-qiim.vercel.app/endpoint",
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Response:", response.data);
+
+        setMusicFile(file);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
-
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
