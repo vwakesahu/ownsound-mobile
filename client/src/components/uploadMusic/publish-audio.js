@@ -72,6 +72,7 @@ const PublishAudio = () => {
         //   data.append("coverImage", coverImage);
         // }
 
+<<<<<<< HEAD
         // const response = await axios.post(
         //   "https://ownsound-qiim.vercel.app/endpoint",
         //   data,
@@ -81,6 +82,18 @@ const PublishAudio = () => {
         //     },
         //   }
         // );
+=======
+        const response = await axios.post(
+          // "https://ownsound-qiim.vercel.app/endpoint",
+          "http://localhost:8000/endpoint",
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+>>>>>>> 0624133f77342b70bf24ba8d816334055624375f
 
         // console.log("Response:", response.data);
 
