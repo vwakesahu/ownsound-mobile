@@ -99,7 +99,9 @@ const PublishAudio = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Button variant="outline">Publish Audio</Button>
+        <Button variant="outline" className="w-full h-full">
+          Publish Audio
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -245,6 +247,7 @@ const PublishAudio = () => {
           )}
         </div>
         <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           {step === 1 && (
             <Button onClick={handleNextStep} disabled={!fileName}>
               Next
