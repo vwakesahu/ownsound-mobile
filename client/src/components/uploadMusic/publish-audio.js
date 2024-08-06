@@ -18,6 +18,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { MdDeleteForever } from "react-icons/md";
 import { UploadCloud, Percent } from "lucide-react";
+import axios from "axios";
 
 const PublishAudio = () => {
   const [musicFile, setMusicFile] = useState(null);
@@ -66,7 +67,7 @@ const PublishAudio = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("songName", songName);
     formData.append("songDescription", songDescription);
@@ -90,10 +91,8 @@ const PublishAudio = () => {
     }
 
     // Handle the FormData, e.g., send it to an API
-    // fetch('/api/endpoint', {
-    //   method: 'POST',
-    //   body: formData,
-    // });
+    // const { data } = await axios.post("/api/upload", formData);
+    // console.log(data);
   };
 
   return (
