@@ -68,7 +68,8 @@ const PublishAudio = () => {
         // }
 
         const response = await axios.post(
-          "https://ownsound-qiim.vercel.app/endpoint",
+          // "https://ownsound-qiim.vercel.app/endpoint",
+          "http://localhost:8000/endpoint",
           data,
           {
             headers: {
