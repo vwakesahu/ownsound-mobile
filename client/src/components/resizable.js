@@ -15,7 +15,7 @@ import {
 import { audioTracks, playlists } from "@/utils/dummy";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import PublishAudio from "./publish-audio";
+import PublishAudio from "./uploadMusic/publish-audio";
 
 export function ResizableComponent({
   w0,
