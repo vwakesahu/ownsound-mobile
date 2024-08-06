@@ -55,8 +55,10 @@ const PublishAudio = () => {
     setImageSrc(null);
   };
 
-  const handleNextStep = () => {
-    if (step === 1 && fileName) {
+  const handleNextStep = async () => {
+    if (step === 1 && fileName && musicFile) {
+      //upload music get reposnse
+      // const { data } = await axios.post("/api/upload", formData);
       setStep(2);
     }
   };
