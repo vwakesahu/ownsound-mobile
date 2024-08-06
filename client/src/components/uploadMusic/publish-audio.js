@@ -18,6 +18,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { MdDeleteForever } from "react-icons/md";
 import { UploadCloud, Percent } from "lucide-react";
+import axios from "axios";
 
 const PublishAudio = () => {
   const [musicFile, setMusicFile] = useState(null);
@@ -31,14 +32,59 @@ const PublishAudio = () => {
   const [royaltyPrice, setRoyaltyPrice] = useState("");
   const [royaltyPercentage, setRoyaltyPercentage] = useState("");
 
-  const handleFileUpload = (e) => {
+  const [formData, setFormData] = useState({
+    songName: "",
+    songDescription: "",
+    basePrice: "",
+    royaltyPrice: "",
+    royaltyPercentage: "",
+    isRentingAllowed: false,
+  });
+  const handleFileUpload = async (e) => {
+    const formData = {
+      songName: "",
+      songDescription: "",
+      basePrice: "",
+      royaltyPrice: "",
+      royaltyPercentage: "",
+      isRentingAllowed: false,
+    };
     const file = e.target.files[0];
     if (file) {
-      setMusicFile(file);
-      setFileName(file.name);
+      try {
+        const data = new FormData();
+
+        // Append text fields
+        Object.keys(formData).forEach((key) => {
+          data.append(key, formData[key]);
+        });
+
+        // Append music file
+        data.append("musicFile", file);
+
+        // Append cover image if it exists
+        // if (coverImage) {
+        //   data.append("coverImage", coverImage);
+        // }
+
+        const response = await axios.post(
+          "https://ownsound-qiim.vercel.app/endpoint",
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Response:", response.data);
+
+        setMusicFile(file);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
-
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -54,8 +100,10 @@ const PublishAudio = () => {
     setImageSrc(null);
   };
 
-  const handleNextStep = () => {
-    if (step === 1 && fileName) {
+  const handleNextStep = async () => {
+    if (step === 1 && fileName && musicFile) {
+      //upload music get reposnse
+      // const { data } = await axios.post("/api/upload", formData);
       setStep(2);
     }
   };
@@ -66,15 +114,14 @@ const PublishAudio = () => {
     }
   };
 
-   const handleSubmit = async (e) => {
-     e.preventDefault();
-     const formData = new FormData();
-     formData.append("songName", songName);
-     formData.append("songDescription", songDescription);
-     formData.append("basePrice", basePrice);
-     formData.append("royaltyPrice", royaltyPrice);
-     formData.append("royaltyPercentage", royaltyPercentage);
-     formData.append("isRentingAllowed", isRentingAllowed);
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append("songName", songName);
+    formData.append("songDescription", songDescription);
+    formData.append("basePrice", basePrice);
+    formData.append("royaltyPrice", royaltyPrice);
+    formData.append("royaltyPercentage", royaltyPercentage);
+    formData.append("isRentingAllowed", isRentingAllowed);
 
      if (musicFile) {
        formData.append("musicFile", musicFile);
@@ -90,18 +137,10 @@ const PublishAudio = () => {
        console.log(`${key}: ${value}`);
      }
 
-     // Handle the FormData, e.g., send it to an API
-     const response = await fetch("http://localhost:8000/endpoint", {
-       method: "POST",
-       body: formData,
-     });
-     console.log(response);
-     if (response.ok) {
-       alert("Data uploaded successfully");
-     } else {
-       alert("Failed to upload data");
-     }
-   };
+    // Handle the FormData, e.g., send it to an API
+    // const { data } = await axios.post("/api/upload", formData);
+    // console.log(data);
+  };
 
   return (
     <AlertDialog>
