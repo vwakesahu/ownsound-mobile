@@ -123,19 +123,19 @@ const PublishAudio = () => {
     formData.append("royaltyPercentage", royaltyPercentage);
     formData.append("isRentingAllowed", isRentingAllowed);
 
-    if (musicFile) {
-      formData.append("musicFile", musicFile);
-    }
+     if (musicFile) {
+       formData.append("musicFile", musicFile);
+     }
 
-    if (imageSrc) {
-      formData.append("coverImage", imageSrc);
-    }
+     if (imageSrc) {
+       formData.append("coverImage", imageSrc);
+     }
 
-    // Log data for debugging
-    console.log("Form Data:");
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+     // Log data for debugging
+     console.log("Form Data:");
+     for (const [key, value] of formData.entries()) {
+       console.log(`${key}: ${value}`);
+     }
 
     // Handle the FormData, e.g., send it to an API
     // const { data } = await axios.post("/api/upload", formData);
