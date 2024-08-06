@@ -11,6 +11,7 @@ const Page = () => {
     isPlaying: false,
     index: 0,
   });
+  const [selectedLayout, setSelectedLayout] = useState("home");
   const [selectedMode, setSelectedMode] = useState("songs");
   const { ready } = usePrivy();
   const { wallets } = useWallets();
@@ -22,15 +23,17 @@ const Page = () => {
       </div>
     );
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen">
       <ResizableComponent
         w0={w0}
         musicPlayer={musicPlayer}
         setMusicPlayer={setMusicPlayer}
         selectedMode={selectedMode}
         setSelectedMode={setSelectedMode}
+        selectedLayout={selectedLayout}
+        setSelectedLayout={setSelectedLayout}
       />
-      <div className="fixed w-full bottom-0 border-t p-4 bg-backgroundOpac backdrop-blur-md flex items-center justify-between">
+      <div className="fixed w-full bottom-0 border-t p-4 bg-backgroundOpac backdrop-blur-xl grid grid-cols-3">
         <div className="flex gap-3 items-center">
           <img
             src={

@@ -101,7 +101,7 @@ export default function BottomAudioPlayer({
       <div className="controls flex items-center gap-2">
         <button
           onClick={handlePlayPause}
-          className="bg-primary text-white rounded-full p-1.5"
+          className="bg-primary text-white rounded-full p-1.5 flex items-center justify-center"
         >
           {!playing ? (
             <PlayIcon className="w-3 h-3" />

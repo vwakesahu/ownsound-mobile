@@ -5,17 +5,15 @@ import {
 } from "@/components/ui/resizable";
 import Login from "./login";
 import { Badge } from "./ui/badge";
-import {
-  ArrowLeftIcon,
-  PauseIcon,
-  PlayIcon,
-  PlugIcon,
-  PlusIcon,
-} from "lucide-react";
+import { ArrowLeftIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { audioTracks, playlists } from "@/utils/dummy";
 import { useState } from "react";
-import { Button } from "./ui/button";
 import PublishAudio from "./uploadMusic/publish-audio";
+import Image from "next/image";
+import { User } from "lucide-react";
+import { BiHomeAlt2 } from "react-icons/bi";
+import { CiGlobe } from "react-icons/ci";
+import Profile from "./profile/profile";
 
 export function ResizableComponent({
   w0,
@@ -23,17 +21,54 @@ export function ResizableComponent({
   setMusicPlayer,
   selectedMode,
   setSelectedMode,
+  selectedLayout,
+  setSelectedLayout,
 }) {
   const [clickedIdx, setClickedIdx] = useState(0);
 
   const handleSelectedMusicPlay = (index) => {
     setMusicPlayer({ ...musicPlayer, index: index });
   };
+
+  const menuItems = [
+    { name: "Home", icon: BiHomeAlt2 },
+    { name: "Explore", icon: CiGlobe },
+    { name: "Profile", icon: User },
+  ];
+  const handleClick = (item) => {
+    setSelectedLayout(item.toLowerCase());
+  };
+
   return (
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={50}>
-        <div className="flex items-center justify-between w-full p-6 dark:bg-muted/10 bg-muted border-b">
-          <p className="font-light">Own Sound</p>
+        <div className="flex items-center gap-3 w-full p-6 dark:bg-muted/10 bg-muted border-b">
+          <Image
+            src={"/icons/token-coin.svg"}
+            width={25}
+            height={25}
+            alt="coin"
+          />
+          <p className="">Own Sound</p>
+        </div>
+        <div className="flex flex-col space-y-6 p-4 mt-4">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.name}
+                className={`flex items-center space-x-2 cursor-pointer transition-transform transform ${
+                  selectedLayout === item.name.toLocaleLowerCase()
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                }`}
+                onClick={() => handleClick(item.name)}
+              >
+                <Icon className="h-6 w-6" />
+                <span>{item.name}</span>
+              </div>
+            );
+          })}
         </div>
       </ResizablePanel>
       <ResizableHandle />
@@ -42,8 +77,18 @@ export function ResizableComponent({
           <div className="w-full flex items-center justify-end">
             <PublishAudio />
           </div>
-
-          <span className="font-semibold">One</span>
+          {selectedLayout === "home" && <div className="mt-10">Home</div>}
+          {selectedLayout === "song" && (
+            <div className="h-full flex items-center justify-center mt-10">
+              <img
+                src={audioTracks[musicPlayer.index].cover}
+                width={600}
+                height={600}
+                className="rounded-lg drop-shadow-md aspect-square"
+              />
+            </div>
+          )}
+          {selectedLayout === "profile" && <Profile />}
         </div>
       </ResizablePanel>
       <ResizableHandle />
