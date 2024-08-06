@@ -14,6 +14,7 @@ import { User } from "lucide-react";
 import { BiHomeAlt2 } from "react-icons/bi";
 import { CiGlobe } from "react-icons/ci";
 import Profile from "./profile/profile";
+import Explore from "./explore/explore";
 
 export function ResizableComponent({
   w0,
@@ -74,9 +75,12 @@ export function ResizableComponent({
       <ResizableHandle />
       <ResizablePanel defaultSize={120}>
         <div className="p-6">
-          <div className="w-full flex items-center justify-end">
-            <PublishAudio />
-          </div>
+          {/* {selectedLayout === "profile" && (
+            <div className="w-full flex items-center justify-end">
+              <PublishAudio />
+            </div>
+          )} */}
+
           {selectedLayout === "home" && <div className="mt-10">Home</div>}
           {selectedLayout === "song" && (
             <div className="h-full flex items-center justify-center mt-10">
@@ -89,6 +93,7 @@ export function ResizableComponent({
             </div>
           )}
           {selectedLayout === "profile" && <Profile />}
+          {selectedLayout === "explore" && <Explore />}
         </div>
       </ResizablePanel>
       <ResizableHandle />

@@ -3,12 +3,61 @@ import React from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { audioTracks, playlists } from "@/utils/dummy";
+import HorizontalScroll from "../horizontal-scroll";
+import { v4 as uuidv4 } from "uuid";
+import PublishAudio from "../uploadMusic/publish-audio";
 
 const Profile = () => {
+  const renderTrackItem = (track) => (
+    <>
+      <div className="w-36 h-36">
+        <img
+          src={track.cover}
+          className="aspect-square rounded-md w-full h-full object-cover"
+          alt={track.title}
+        />
+      </div>
+      <div>
+        <p
+          className="w-full text-center truncate max-w-xs mx-auto"
+          title={track.title}
+        >
+          {track.title}
+        </p>
+        <p className="text-sm text-center text-muted-foreground">
+          {track.artist}
+        </p>
+      </div>
+    </>
+  );
+
+  const renderPlaylistItem = (playlist) => (
+    <>
+      <div className="w-36 h-36">
+        <img
+          src={playlist.image}
+          className="aspect-square rounded-md w-full h-full object-cover"
+          alt={playlist.name}
+        />
+      </div>
+      <div>
+        <p
+          className="w-full text-center truncate max-w-xs mx-auto"
+          title={playlist.name}
+        >
+          {playlist.name}
+        </p>
+        <p className="text-sm text-center text-muted-foreground">
+          {playlist.creator}
+        </p>
+      </div>
+    </>
+  );
   return (
-    <div className="w-full grid gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide">
-      <div className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+    <div className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide">
+      <div className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between">
         GM Ser!
+        <PublishAudio />
       </div>
 
       <div className="flex w-full gap-3 items-center">
@@ -26,57 +75,19 @@ const Profile = () => {
       <div className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
         Your NFS's
       </div>
-      <div className="grid grid-cols-5 gap-4">
-        {audioTracks.map((track, index) => (
-          <div key={index} className="space-y-2">
-            <div className="w-36 h-36">
-              <img
-                src={track.cover}
-                className="aspect-square rounded-md w-full h-full object-cover"
-                alt={track.title}
-              />
-            </div>
-            <div>
-              <p
-                className="w-full text-center truncate max-w-xs mx-auto"
-                title={track.title}
-              >
-                {track.title}
-              </p>
-              <p className="text-sm text-center text-muted-foreground">
-                {track.artist}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <HorizontalScroll
+        items={audioTracks}
+        renderItem={renderTrackItem}
+        containerId={`scrollContainer-${uuidv4()}`}
+      />
       <div className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
-        Your Playlists
+        Your Playlist
       </div>
-      <div className="grid grid-cols-5 gap-4">
-        {playlists.map((track, index) => (
-          <div key={index} className="space-y-2">
-            <div className="w-36 h-36">
-              <img
-                src={track.image}
-                className="aspect-square rounded-md w-full h-full object-cover"
-                alt={track.name}
-              />
-            </div>
-            <div>
-              <p
-                className="w-full text-center truncate max-w-xs mx-auto"
-                title={track.name}
-              >
-                {track.name}
-              </p>
-              <p className="text-sm text-center text-muted-foreground">
-                {track.creator}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <HorizontalScroll
+        items={playlists}
+        renderItem={renderPlaylistItem}
+        containerId={`scrollContainer-${uuidv4()}`}
+      />
     </div>
   );
 };
