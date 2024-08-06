@@ -51,17 +51,17 @@ const Profile = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching songs:", error);
-      // toast.error("Failed to fetch songs");
       setError(true);
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (ready && authenticated && w0?.address !== undefined) {
       console.log("Wallet Address: ", w0.address);
       getSongs(w0.address);
     }
-  }, [w0]);
+  }, [w0, ready, authenticated]);
 
   const renderTrackItem = (track) => (
     <>
@@ -108,6 +108,7 @@ const Profile = () => {
       </div>
     </>
   );
+
   return (
     <div className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide">
       <div className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between">
@@ -127,14 +128,22 @@ const Profile = () => {
           <Input placeholder="Change username" className="max-w-xs" />
         </div>
       </div>
+
       <div className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
         Your NFS's
       </div>
-      <HorizontalScroll
-        items={audioTracks}
-        renderItem={renderTrackItem}
-        containerId={`scrollContainer-${uuidv4()}`}
-      />
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error loading songs</p>
+      ) : (
+        <HorizontalScroll
+          items={songs}
+          renderItem={renderTrackItem}
+          containerId={`scrollContainer-${uuidv4()}`}
+        />
+      )}
+
       <div className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
         Your Playlist
       </div>
