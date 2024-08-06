@@ -66,35 +66,42 @@ const PublishAudio = () => {
     }
   };
 
-  const handleSubmit = () => {
-    const formData = new FormData();
-    formData.append("songName", songName);
-    formData.append("songDescription", songDescription);
-    formData.append("basePrice", basePrice);
-    formData.append("royaltyPrice", royaltyPrice);
-    formData.append("royaltyPercentage", royaltyPercentage);
-    formData.append("isRentingAllowed", isRentingAllowed);
+   const handleSubmit = async (e) => {
+     e.preventDefault();
+     const formData = new FormData();
+     formData.append("songName", songName);
+     formData.append("songDescription", songDescription);
+     formData.append("basePrice", basePrice);
+     formData.append("royaltyPrice", royaltyPrice);
+     formData.append("royaltyPercentage", royaltyPercentage);
+     formData.append("isRentingAllowed", isRentingAllowed);
 
-    if (musicFile) {
-      formData.append("musicFile", musicFile);
-    }
+     if (musicFile) {
+       formData.append("musicFile", musicFile);
+     }
 
-    if (imageSrc) {
-      formData.append("coverImage", imageSrc);
-    }
+     if (imageSrc) {
+       formData.append("coverImage", imageSrc);
+     }
 
-    // Log data for debugging
-    console.log("Form Data:");
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+     // Log data for debugging
+     console.log("Form Data:");
+     for (const [key, value] of formData.entries()) {
+       console.log(`${key}: ${value}`);
+     }
 
-    // Handle the FormData, e.g., send it to an API
-    // fetch('/api/endpoint', {
-    //   method: 'POST',
-    //   body: formData,
-    // });
-  };
+     // Handle the FormData, e.g., send it to an API
+     const response = await fetch("http://localhost:8000/endpoint", {
+       method: "POST",
+       body: formData,
+     });
+     console.log(response);
+     if (response.ok) {
+       alert("Data uploaded successfully");
+     } else {
+       alert("Failed to upload data");
+     }
+   };
 
   return (
     <AlertDialog>
