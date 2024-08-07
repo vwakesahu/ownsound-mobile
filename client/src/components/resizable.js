@@ -16,20 +16,33 @@ import { CiGlobe } from "react-icons/ci";
 import Profile from "./profile/profile";
 import Explore from "./explore/explore";
 import { ContactAbhi } from "./contact-abhi";
+import { useSelector, useDispatch } from "react-redux";
+import { setMusicPlayer } from "@/redux/musicPlayerSlice";
 
 export function ResizableComponent({
   w0,
-  musicPlayer,
-  setMusicPlayer,
+  // musicPlayer,
+  // setMusicPlayer,
   selectedMode,
   setSelectedMode,
   selectedLayout,
   setSelectedLayout,
 }) {
+  const dispatch = useDispatch();
   const [clickedIdx, setClickedIdx] = useState(0);
+  const musicPlayer = useSelector((state) => state.musicPlayer);
 
-  const handleSelectedMusicPlay = (index) => {
-    setMusicPlayer({ ...musicPlayer, index: index });
+  const handleSelectedMusicPlay = ({ title, artist, soundUri, cover }) => {
+    dispatch(
+      setMusicPlayer({
+        uri: soundUri,
+        isPlaying: true,
+        index: 0,
+        coverImage: cover,
+        title: title,
+        artist: artist,
+      })
+    );
   };
 
   const menuItems = [
@@ -53,7 +66,6 @@ export function ResizableComponent({
               alt="coin"
             /> */}
             <p className="">Own Sound</p>
-            
           </div>
           <div className="flex items-center gap-2 font-semibold text-primary">
             <ContactAbhi/>
@@ -98,7 +110,7 @@ export function ResizableComponent({
           {selectedLayout === "song" && (
             <div className="h-full flex items-center justify-center mt-10">
               <img
-                src={audioTracks[musicPlayer.index].cover}
+                src={musicPlayer.coverImage || "/nft.avif"}
                 width={600}
                 height={600}
                 className="rounded-lg drop-shadow-md aspect-square"
@@ -277,7 +289,7 @@ const MusicList = ({
             <div
               className="rounded-full p-1.5 bg-primary cursor-pointer"
               onClick={() => {
-                handleSelectedMusicPlay(index);
+                handleSelectedMusicPlay(track);
                 setClickedIdx(index);
               }}
             >
