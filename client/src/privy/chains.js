@@ -13,10 +13,10 @@ export const polygonAmoy = {
   },
   rpcUrls: {
     default: {
-      http: ["https://rpc-amoy.polygon.technology/"],
+      http: ["https://polygon-amoy.g.alchemy.com/v2/rOAvaffjfm2z4tnoHebrxreF3iy3pDSL"],
     },
     public: {
-      http: ["https://rpc-amoy.polygon.technology/"],
+      http: ["https://polygon-amoy.g.alchemy.com/v2/rOAvaffjfm2z4tnoHebrxreF3iy3pDSL"],
     },
   },
   blockExplorers: {
@@ -39,7 +39,7 @@ export async function switchToPolygonAmoy(w0, setter) {
           symbol: "MATIC",
           decimals: 18,
         },
-        rpcUrls: ["https://rpc-amoy.polygon.technology/"],
+        rpcUrls: ["https://polygon-amoy.g.alchemy.com/v2/rOAvaffjfm2z4tnoHebrxreF3iy3pDSL"],
         blockExplorerUrls: ["https://amoy.polygonscan.com/"],
       },
     ]);
