@@ -9,6 +9,7 @@ import PublishAudio from "../uploadMusic/publish-audio";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { Contract } from "ethers";
 import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
+import Loader from "../loader";
 
 const Profile = () => {
   const { authenticated, ready } = usePrivy();
@@ -121,7 +122,7 @@ const Profile = () => {
 
   return (
     <div className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide">
-      <div className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between">
+      <div className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background">
         GM Ser!
         <PublishAudio getSongs={getSongs} w0={w0} />
       </div>
@@ -140,10 +141,12 @@ const Profile = () => {
       </div>
 
       <div className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
-        Your NFTs
+        Your NFS's
       </div>
       {loading ? (
-        <p>Loading...</p>
+        <div className="grid place-items-center min-h-32">
+          <Loader />
+        </div>
       ) : error ? (
         <p>Error loading songs</p>
       ) : (
