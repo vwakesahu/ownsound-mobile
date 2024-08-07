@@ -22,9 +22,11 @@ import axios from "axios";
 import { useWallets } from "@privy-io/react-auth";
 import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import { Contract } from "ethers";
+import { toast } from "sonner";
 
 const PublishAudio = ({ getSongs }) => {
   const [isPublishAlertOpen, setIsPublishAlertOpen] = useState(false);
+  const [value, setValue] = useState("");
   const { wallets } = useWallets();
   const w0 = wallets[0];
   const [musicFile, setMusicFile] = useState(null);
@@ -69,22 +71,19 @@ const PublishAudio = ({ getSongs }) => {
         // Append music file
         data.append("musicFile", file);
 
-        // Append cover image if it exists
-        // if (coverImage) {
-        //   data.append("coverImage", coverImage);
-        // }
+        const response = await axios.post(
+          "http://localhost:3001/endpoint",
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-        // const response = await axios.post(
-        //   "https://ownsound-qiim.vercel.app/endpoint",
-        //   data,
-        //   {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //     },
-        //   }
-        // );
-
-        // console.log("Response:", response.data);
+        console.log("Response:", response.data);
+        console.log("Response:", response.data.value);
+        setValue(response.data.value);
 
         setMusicFile(file);
         setFileName(file.name);
@@ -130,8 +129,6 @@ const PublishAudio = ({ getSongs }) => {
 
   const handleNextStep = async () => {
     if (step === 1 && fileName && musicFile) {
-      //upload music get reposnse
-      // const { data } = await axios.post("/api/upload", formData);
       setStep(2);
     }
   };
@@ -148,13 +145,12 @@ const PublishAudio = ({ getSongs }) => {
 
     const dummyPayload = {
       basePrice: basePrice,
-      fullRoyaltyAllowed: false,
-      fullRoyaltyBuyoutPrice: 1000,
+      fullRoyaltyAllowed: true,
+      fullRoyaltyBuyoutPrice: royaltyPrice,
       title: songName,
       description: songDescription,
       coverImage: imageSrc,
-      mp3FileLocationId:
-        "bafybeic5zcykf7fpg7c2zuf76p2gddegxlt64hbfp76qqs7l4l6yx3nraa",
+      mp3FileLocationId: value,
       isRentingAllowed: isRentingAllowed,
       supply: 1,
       royaltyPercentage: royaltyPercentage,
@@ -183,6 +179,7 @@ const PublishAudio = ({ getSongs }) => {
       setIsLoading(false);
       setIsPublishAlertOpen(false);
       await getSongs(w0.address);
+      toast.success("Successfully published the song");
     } catch (error) {
       setIsLoading(false);
       console.error("Error creating NFT:", error);
