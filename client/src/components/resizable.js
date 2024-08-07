@@ -99,60 +99,108 @@ export function ResizableComponent({
   return (
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={50}>
-        <div className="w-full p-6 dark:bg-muted/10 bg-muted border-b flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* <Image
-              src={"/icons/token-coin.svg"}
-              width={25}
-              height={25}
-              alt="coin"
-            /> */}
+        <motion.div
+          className="w-full p-6 dark:bg-muted/10 bg-muted border-b flex items-center justify-between"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div
+            className="flex items-center gap-3"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             <p className="">Own Sound</p>
-          </div>
-          <div className="flex items-center gap-2 font-semibold text-primary">
+          </motion.div>
+          <AnimatePresence mode="wait">
             {isLoadingBalance ? (
-              <div className="w-full grid items-center justify-end">
+              <motion.div
+                key="loader"
+                className="w-full grid items-center justify-end"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+              >
                 <div className="flex">
                   <Loader noWidth={true} />
                 </div>
-              </div>
+              </motion.div>
             ) : musicXBalance <= 0 ? (
-              <ContactAbhi />
+              <motion.div
+                key="contact"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ContactAbhi />
+              </motion.div>
             ) : (
-              <>
-                <p className="text-primary">
+              <motion.div
+                key="balance"
+                className="flex items-center gap-2 font-semibold text-primary"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.p
+                  className="text-primary"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
                   {musicXBalance === "0" ? "0" : musicXBalance.slice(0, -18)}
-                </p>
-                <Image
-                  src={"/icons/token-coin.svg"}
-                  width={25}
-                  height={25}
-                  alt="coin"
-                />
-              </>
+                </motion.p>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+                >
+                  <Image
+                    src={"/icons/token-coin.svg"}
+                    width={25}
+                    height={25}
+                    alt="coin"
+                  />
+                </motion.div>
+              </motion.div>
             )}
-          </div>
-        </div>
-        <div className="flex flex-col space-y-6 p-4 mt-4">
-          {menuItems.map((item) => {
+          </AnimatePresence>
+        </motion.div>
+        <motion.div
+          className="flex flex-col space-y-6 p-4 mt-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, staggerChildren: 0.1 }}
+        >
+          {menuItems.map((item, index) => {
             const Icon = item.icon;
             return (
-              <div
+              <motion.div
                 key={item.name}
                 className={`flex items-center space-x-2 cursor-pointer transition-transform transform ${
-                  selectedLayout === item.name.toLocaleLowerCase()
+                  selectedLayout === item.name.toLowerCase()
                     ? "text-primary"
                     : "text-muted-foreground"
                 }`}
                 onClick={() => handleClick(item.name)}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 + index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Icon className="h-6 w-6" />
                 <span>{item.name}</span>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </ResizablePanel>
+
       <ResizableHandle />
       <ResizablePanel defaultSize={120}>
         <div className="p-6">
