@@ -23,8 +23,11 @@ import { useWallets } from "@privy-io/react-auth";
 import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import { Contract } from "ethers";
 import { toast } from "sonner";
+import Loader from "../loader";
 
 const PublishAudio = ({ getSongs }) => {
+  const [isMusicUploading, setIsMusicUploading] = useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const [isPublishAlertOpen, setIsPublishAlertOpen] = useState(false);
   const [value, setValue] = useState("");
   const { wallets } = useWallets();
@@ -50,16 +53,17 @@ const PublishAudio = ({ getSongs }) => {
     isRentingAllowed: false,
   });
   const handleFileUpload = async (e) => {
-    const formData = {
-      songName: "",
-      songDescription: "",
-      basePrice: "",
-      royaltyPrice: "",
-      royaltyPercentage: "",
-      isRentingAllowed: false,
-    };
+    // const formData = {
+    //   songName: "",
+    //   songDescription: "",
+    //   basePrice: "",
+    //   royaltyPrice: "",
+    //   royaltyPercentage: "",
+    //   isRentingAllowed: false,
+    // };
     const file = e.target.files[0];
     if (file) {
+      setIsMusicUploading(true);
       try {
         const data = new FormData();
 
@@ -89,17 +93,20 @@ const PublishAudio = ({ getSongs }) => {
         setFileName(file.name);
       } catch (error) {
         console.error("Error uploading file:", error);
+      } finally {
+        setIsMusicUploading(false);
       }
     }
   };
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      setIsImageUploading(true);
       try {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "fi0lxkc1"); // This should be an unsigned upload preset
-        formData.append("api_key", "697773597345229"); // Your API key
+        formData.append("upload_preset", "fi0lxkc1");
+        formData.append("api_key", "697773597345229");
 
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/da9h8exvs/image/upload",
@@ -118,11 +125,11 @@ const PublishAudio = ({ getSongs }) => {
         setImageSrc(data.secure_url);
       } catch (error) {
         console.error("Error uploading image:", error);
-        // Handle the error (e.g., show an error message to the user)
+      } finally {
+        setIsImageUploading(false);
       }
     }
   };
-
   const handleDeleteImage = () => {
     setImageSrc(null);
   };
@@ -221,13 +228,23 @@ const PublishAudio = ({ getSongs }) => {
                   accept="audio/*"
                   className="absolute inset-0 opacity-0 cursor-pointer"
                   onChange={handleFileUpload}
+                  disabled={isMusicUploading}
                 />
-                <UploadCloud className="text-muted-foreground w-8 h-8" />
-                <p className="text-muted-foreground">
-                  {fileName
-                    ? `Selected File: ${fileName}`
-                    : "Upload Music File"}
-                </p>
+                {isMusicUploading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="buffering"></div>
+                    <Loader />
+                  </div>
+                ) : (
+                  <>
+                    <UploadCloud className="text-muted-foreground w-8 h-8" />
+                    <p className="text-muted-foreground">
+                      {fileName
+                        ? `Selected File: ${fileName}`
+                        : "Upload Music File"}
+                    </p>
+                  </>
+                )}
               </div>
             </>
           )}
@@ -251,28 +268,37 @@ const PublishAudio = ({ getSongs }) => {
                     </>
                   ) : (
                     <div className="relative h-full w-full flex items-center justify-center">
-                      <div>
-                        <UploadCloud className="text-muted-foreground" />
-                      </div>
-                      <label className="absolute cursor-pointer flex items-center justify-center w-full h-full text-muted">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={handleImageUpload}
-                        />
-                      </label>
+                      {isImageUploading ? (
+                        <div className="flex flex-col items-center">
+                          <div className="buffering"></div>
+                          <Loader />
+                        </div>
+                      ) : (
+                        <div className="relative h-full w-full flex items-center justify-center">
+                          <div>
+                            <UploadCloud className="text-muted-foreground" />
+                          </div>
+                          <label className="absolute cursor-pointer flex items-center justify-center w-full h-full text-muted">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleImageUpload}
+                            />
+                          </label>
+                        </div>
+                      )}
+                     
                     </div>
                   )}
-                </div>
-                <div className="h-16 flex flex-col justify-between">
-                  <Label>Song Name</Label>
-                  <Input
-                    placeholder="Enter song name"
-                    value={songName}
-                    onChange={(e) => setSongName(e.target.value)}
-                  />
-                </div>
+                </div> <div className="h-16 flex flex-col justify-between">
+                        <Label>Song Name</Label>
+                        <Input
+                          placeholder="Enter song name"
+                          value={songName}
+                          onChange={(e) => setSongName(e.target.value)}
+                        />
+                      </div>
               </div>
 
               <div>
