@@ -71,15 +71,11 @@ const PublishAudio = ({ getSongs }) => {
         // Append music file
         data.append("musicFile", file);
 
-        const response = await axios.post(
-          "http://localhost:3001/endpoint",
-          data,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await axios.post("/api/endpoint", data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
         console.log("Response:", response.data);
         console.log("Response:", response.data.value);
