@@ -15,6 +15,8 @@ import animationData from "@/animations/no.json";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setMusicPlayer } from "@/redux/musicPlayerSlice";
+import TrackItem from "./track-item";
+import PlaylistItem from "./playlist-item";
 
 const Profile = () => {
   const { authenticated, ready } = usePrivy();
@@ -70,85 +72,6 @@ const Profile = () => {
     }
   }, [w0, ready, authenticated]);
 
-  const renderTrackItem = (song) => {
-    const dispatch = useDispatch();
-    const [id, metadata, ownership] = song;
-    const playSong = async (id, meta) => {
-      const { data } = await axios.post(`/api/hashsong`, { randomId: id });
-      console.log(data);
-      dispatch(
-        setMusicPlayer({
-          uri: data,
-          isPlaying: true,
-          index: 0,
-          coverImage: meta[5],
-          title: meta[3],
-          artist: meta[4],
-        })
-      );
-    };
-
-    return (
-      <>
-        <div className="relative flex">
-          <div className="w-36 h-36">
-            <img
-              src={metadata[5]} // coverImage URL
-              className="aspect-square rounded-md w-full h-full object-cover"
-              alt={metadata[3]} // title
-            />
-          </div>
-          <div
-            className="w-10 h-10 bg-primary z-10 -bottom-3 -right-2 absolute rounded-full flex items-center justify-center text-white"
-            onClick={() => {
-              playSong(
-                "bafybeic5zcykf7fpg7c2zuf76p2gddegxlt64hbfp76qqs7l4l6yx3nraa",
-                metadata
-              );
-            }}
-          >
-            <PlayCircle />
-          </div>
-        </div>
-
-        <div>
-          <p
-            className="w-full text-center truncate max-w-xs mx-auto"
-            title={metadata[3]} // title
-          >
-            {metadata[3]}
-          </p>
-          <p className="text-sm text-center text-muted-foreground">
-            {metadata[4]}
-          </p>
-        </div>
-      </>
-    );
-  };
-
-  const renderPlaylistItem = (playlist) => (
-    <>
-      <div className="w-36 h-36">
-        <img
-          src={playlist.image}
-          className="aspect-square rounded-md w-full h-full object-cover"
-          alt={playlist.name}
-        />
-      </div>
-      <div>
-        <p
-          className="w-full text-center truncate max-w-xs mx-auto"
-          title={playlist.name}
-        >
-          {playlist.name}
-        </p>
-        <p className="text-sm text-center text-muted-foreground">
-          {playlist.creator}
-        </p>
-      </div>
-    </>
-  );
-
   return (
     <div className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide">
       <div className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background">
@@ -159,7 +82,7 @@ const Profile = () => {
       <div className="flex w-full gap-3 items-center">
         <div className="w-24 h-24 relative">
           <img src="/nft.avif" className="rounded-lg" />
-          <div className="w-6 h-6 flex items-center justify-center absolute bg-muted z-50 -bottom-2 -right-2 rounded-full cursor-pointer drop-shadow">
+          <div className="w-6 h-6 flex items-center justify-center absolute bg-muted z-10 -bottom-2 -right-2 rounded-full cursor-pointer drop-shadow">
             <PencilIcon className="w-3" />
           </div>
         </div>
@@ -188,7 +111,7 @@ const Profile = () => {
       ) : (
         <HorizontalScroll
           items={songs}
-          renderItem={renderTrackItem}
+          renderItem={(song) => <TrackItem song={song} />}
           containerId={`scrollContainer-${uuidv4()}`}
         />
       )}
@@ -198,7 +121,7 @@ const Profile = () => {
       </div>
       <HorizontalScroll
         items={playlists}
-        renderItem={renderPlaylistItem}
+        renderItem={(playlist) => <PlaylistItem playlist={playlist} />}
         containerId={`scrollContainer-${uuidv4()}`}
       />
     </div>
