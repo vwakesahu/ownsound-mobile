@@ -2,7 +2,7 @@ import { PencilIcon, PlayCircle, PlayIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { audioTracks, playlists } from "@/utils/dummy";
+import { playlists } from "@/utils/dummy";
 import HorizontalScroll from "../horizontal-scroll";
 import { v4 as uuidv4 } from "uuid";
 import PublishAudio from "../uploadMusic/publish-audio";

@@ -7,7 +7,7 @@ import Login from "./login";
 import { Badge } from "./ui/badge";
 import { ArrowLeftIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { audioTracks, playlists } from "@/utils/dummy";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PublishAudio from "./uploadMusic/publish-audio";
 import Image from "next/image";
 import { User } from "lucide-react";
@@ -18,6 +18,10 @@ import Explore from "./explore/explore";
 import { ContactAbhi } from "./contact-abhi";
 import { useSelector, useDispatch } from "react-redux";
 import { setMusicPlayer } from "@/redux/musicPlayerSlice";
+import { Contract } from "ethers";
+import { musicXContractABI, musicXContractAddress } from "@/utils/contract";
+import { usePrivy } from "@privy-io/react-auth";
+import Loader from "./loader";
 
 export function ResizableComponent({
   w0,
@@ -28,9 +32,48 @@ export function ResizableComponent({
   selectedLayout,
   setSelectedLayout,
 }) {
+  const { authenticated, ready } = usePrivy();
   const dispatch = useDispatch();
   const [clickedIdx, setClickedIdx] = useState(0);
   const musicPlayer = useSelector((state) => state.musicPlayer);
+  const [musicXBalance, setMusicXBalance] = useState(0);
+  const [isLoadingBalance, setIsLoadingBalance] = useState(true);
+
+  const getMusicXTokenBalance = async (address) => {
+    setIsLoadingBalance(true);
+    try {
+      const provider = await w0?.getEthersProvider();
+      if (!provider) {
+        throw new Error("Provider is not available");
+      }
+
+      const signer = await provider.getSigner();
+      if (!signer) {
+        throw new Error("Signer is not available");
+      }
+
+      const contract = new Contract(
+        musicXContractAddress,
+        musicXContractABI,
+        signer
+      );
+
+      const res = await contract.balanceOf(address);
+      setMusicXBalance(res.toString());
+    } catch (error) {
+      console.error("Error fetching MusicX balance:", error);
+      setMusicXBalance(0);
+    } finally {
+      setIsLoadingBalance(false);
+    }
+  };
+
+  useEffect(() => {
+    if (ready && authenticated && w0?.address !== undefined) {
+      console.log("Wallet Address: ", w0.address);
+      getMusicXTokenBalance(w0.address);
+    }
+  }, [w0, ready, authenticated]);
 
   const handleSelectedMusicPlay = ({ title, artist, soundUri, cover }) => {
     dispatch(
@@ -68,13 +111,23 @@ export function ResizableComponent({
             <p className="">Own Sound</p>
           </div>
           <div className="flex items-center gap-2 font-semibold text-primary">
-            <ContactAbhi/>
-            <Image
-              src={"/icons/token-coin.svg"}
-              width={25}
-              height={25}
-              alt="coin"
-            />
+            {isLoadingBalance ? (
+              <Loader />
+            ) : musicXBalance <= 0 ? (
+              <ContactAbhi />
+            ) : (
+              <>
+                <p className="text-primary">
+                  {musicXBalance === "0" ? "0" : musicXBalance.slice(0, -18)}
+                </p>
+                <Image
+                  src={"/icons/token-coin.svg"}
+                  width={25}
+                  height={25}
+                  alt="coin"
+                />
+              </>
+            )}
           </div>
         </div>
         <div className="flex flex-col space-y-6 p-4 mt-4">
