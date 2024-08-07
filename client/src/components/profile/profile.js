@@ -12,6 +12,9 @@ import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import Loader from "../loader";
 import Lottie from "lottie-react";
 import animationData from "@/animations/no.json";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setMusicPlayer } from "@/redux/musicPlayerSlice";
 
 const Profile = () => {
   const { authenticated, ready } = usePrivy();
@@ -68,7 +71,23 @@ const Profile = () => {
   }, [w0, ready, authenticated]);
 
   const renderTrackItem = (song) => {
+    const dispatch = useDispatch();
     const [id, metadata, ownership] = song;
+    const playSong = async (id, meta) => {
+      const { data } = await axios.post(`/api/hashsong`, { randomId: id });
+      console.log(data);
+      dispatch(
+        setMusicPlayer({
+          uri: data,
+          isPlaying: true,
+          index: 0,
+          coverImage: meta[5],
+          title: meta[3],
+          artist: meta[4],
+        })
+      );
+    };
+
     return (
       <>
         <div className="relative flex">
@@ -79,7 +98,15 @@ const Profile = () => {
               alt={metadata[3]} // title
             />
           </div>
-          <div className="w-10 h-10 bg-primary z-10 -bottom-3 -right-2 absolute rounded-full flex items-center justify-center text-white">
+          <div
+            className="w-10 h-10 bg-primary z-10 -bottom-3 -right-2 absolute rounded-full flex items-center justify-center text-white"
+            onClick={() => {
+              playSong(
+                "bafybeic5zcykf7fpg7c2zuf76p2gddegxlt64hbfp76qqs7l4l6yx3nraa",
+                metadata
+              );
+            }}
+          >
             <PlayCircle />
           </div>
         </div>
