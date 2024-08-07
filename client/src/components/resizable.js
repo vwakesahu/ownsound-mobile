@@ -23,6 +23,7 @@ import { musicXContractABI, musicXContractAddress } from "@/utils/contract";
 import { usePrivy } from "@privy-io/react-auth";
 import Loader from "./loader";
 import Song from "./song/song";
+import HomePage from "./home-page";
 
 export function ResizableComponent({
   w0,
@@ -204,7 +205,7 @@ export function ResizableComponent({
       <ResizableHandle />
       <ResizablePanel defaultSize={120}>
         <div className="p-6">
-          {selectedLayout === "home" && <div className="mt-10">Home</div>}
+          {selectedLayout === "home" && <div className="mt-10"><HomePage /></div>}
           {selectedLayout === "song" && (
             <div className="h-full flex items-center justify-center mt-10">
               <img
