@@ -8,7 +8,7 @@ import { Badge } from "./ui/badge";
 import { ArrowLeftIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { audioTracks, playlists } from "@/utils/dummy";
 import { useEffect, useState } from "react";
-import PublishAudio from "./uploadMusic/publish-audio";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { User } from "lucide-react";
 import { BiHomeAlt2 } from "react-icons/bi";
@@ -236,86 +236,193 @@ const Playlists = ({
   setClickedIdx,
   handleSelectedMusicPlay,
 }) => {
-  // State to keep track of the currently selected playlist
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
 
-  // Handler function to set the selected playlist
   const handlePlaylistClick = (playlist) => {
     setSelectedPlaylist(playlist);
   };
 
-  return (
-    <div className="px-6 space-y-4">
-      {selectedPlaylist ? (
-        <div>
-          <div className="flex items-center gap-3 mb-6">
-            <ArrowLeftIcon
-              className="w-4 h-4 cursor-pointer"
-              onClick={() => setSelectedPlaylist(null)}
-            />
-            <h2 className="text-xl font-semibold">{selectedPlaylist.name}</h2>
-          </div>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
-          <div className="space-y-2">
-            {selectedPlaylist.tracks.map((track, index) => (
-              <div
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  };
+
+  return (
+    <motion.div
+      className="px-6"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <AnimatePresence mode="wait">
+        {selectedPlaylist ? (
+          <motion.div
+            key="playlist"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="space-y-4"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <ArrowLeftIcon
+                  className="w-4 h-4 cursor-pointer"
+                  onClick={() => setSelectedPlaylist(null)}
+                />
+              </motion.div>
+              <motion.h2
+                className="text-xl font-semibold"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                {selectedPlaylist.name}
+              </motion.h2>
+            </div>
+
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="space-y-4"
+            >
+              {selectedPlaylist.tracks.map((track, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex w-full items-center justify-between p-4 hover:bg-muted rounded-md border"
+                >
+                  <div className="w-full flex items-center gap-4">
+                    <motion.img
+                      src={track.cover}
+                      alt={track.title}
+                      className="w-12 h-12 rounded-md"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    />
+                    <div>
+                      <motion.p
+                        className="font-semibold"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {track.title}
+                      </motion.p>
+                      <motion.p
+                        className="text-sm text-gray-500"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        {track.artist}
+                      </motion.p>
+                    </div>
+                  </div>
+                  <div className="grid place-items-center">
+                    <motion.div
+                      className="rounded-full p-1.5 bg-primary cursor-pointer"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => {
+                        handleSelectedMusicPlay(index);
+                        setClickedIdx(index);
+                      }}
+                    >
+                      <AnimatePresence mode="wait">
+                        {clickedIdx === index ? (
+                          <motion.div
+                            key="pause"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0 }}
+                          >
+                            <PauseIcon className="w-3 h-3 text-white" />
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="play"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0 }}
+                          >
+                            <PlayIcon className="w-3 h-3 text-white" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="playlists"
+            variants={containerVariants}
+            className="space-y-4"
+          >
+            {playlists.map((playlist, index) => (
+              <motion.div
                 key={index}
-                className="flex w-full items-center justify-between p-4 hover:bg-muted rounded-md border"
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                className="flex w-full items-center justify-between p-4 hover:bg-muted rounded-md border cursor-pointer"
+                onClick={() => handlePlaylistClick(playlist)}
               >
                 <div className="w-full flex items-center gap-4">
-                  <img
-                    src={track.cover}
-                    alt={track.title}
+                  <motion.img
+                    src={playlist.image}
+                    alt="cover"
                     className="w-12 h-12 rounded-md"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
                   />
                   <div>
-                    <p className="font-semibold">{track.title}</p>
-                    <p className="text-sm text-gray-500">{track.artist}</p>
+                    <motion.p
+                      className="font-semibold"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      {playlist.name}
+                    </motion.p>
+                    <motion.p
+                      className="text-sm text-gray-500"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      {playlist.tracks.length} songs
+                    </motion.p>
                   </div>
                 </div>
-                <div className="grid place-items-center">
-                  <div
-                    className="rounded-full p-1.5 bg-primary cursor-pointer"
-                    onClick={() => {
-                      handleSelectedMusicPlay(index);
-                      setClickedIdx(index);
-                    }}
-                  >
-                    {clickedIdx === index ? (
-                      <PauseIcon className="w-3 h-3 text-white" />
-                    ) : (
-                      <PlayIcon className="w-3 h-3 text-white" />
-                    )}
-                  </div>
-                </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
-        </div>
-      ) : (
-        playlists.map((playlist, index) => (
-          <div
-            key={index}
-            onClick={() => handlePlaylistClick(playlist)}
-            className="flex w-full items-center justify-between p-4 hover:bg-muted rounded-md border cursor-pointer"
-          >
-            <div className="w-full flex items-center gap-4">
-              <img
-                src={playlist.image}
-                alt="cover"
-                className="w-12 h-12 rounded-md"
-              />
-              <div>
-                <p className="font-semibold">{playlist.name}</p>
-                <p className="text-sm text-gray-500">
-                  {playlist.tracks.length} songs
-                </p>
-              </div>
-            </div>
-          </div>
-        ))
-      )}
-    </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
@@ -325,41 +432,107 @@ const MusicList = ({
   setClickedIdx,
   handleSelectedMusicPlay,
 }) => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  };
+
   return (
-    <div className="px-6 space-y-4">
+    <motion.div
+      className="px-6 space-y-4"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {audioTracks.map((track, index) => (
-        <div
+        <motion.div
           key={index}
+          variants={itemVariants}
+          whileHover={{ scale: 1.02 }}
           className="flex w-full items-center justify-between p-4 hover:bg-muted rounded-md border"
         >
           <div className="w-full flex items-center gap-4">
-            <img
+            <motion.img
               src={track.cover}
               alt="cover"
               className="w-12 h-12 rounded-md"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             />
             <div>
-              <p className="font-semibold">{track.title}</p>
-              <p className="text-sm text-gray-500">{track.artist}</p>
+              <motion.p
+                className="font-semibold"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                {track.title}
+              </motion.p>
+              <motion.p
+                className="text-sm text-gray-500"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                {track.artist}
+              </motion.p>
             </div>
           </div>
           <div className="grid place-items-center">
-            <div
+            <motion.div
               className="rounded-full p-1.5 bg-primary cursor-pointer"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => {
                 handleSelectedMusicPlay(track);
                 setClickedIdx(index);
               }}
             >
-              {clickedIdx === index ? (
-                <PauseIcon className="w-3 h-3 text-white" />
-              ) : (
-                <PlayIcon className="w-3 h-3 text-white" />
-              )}
-            </div>
+              <AnimatePresence mode="wait">
+                {clickedIdx === index ? (
+                  <motion.div
+                    key="pause"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                  >
+                    <PauseIcon className="w-3 h-3 text-white" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="play"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                  >
+                    <PlayIcon className="w-3 h-3 text-white" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 };
+
+export default MusicList;
