@@ -1,4 +1,4 @@
-import { PencilIcon } from "lucide-react";
+import { PencilIcon, PlayCircle, PlayIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -46,6 +46,7 @@ const Profile = () => {
       );
 
       const res = await contract.getWalletTokensWithMetadata(address);
+
       console.log(res);
       setSongs(res);
       setLoading(false);
@@ -67,13 +68,19 @@ const Profile = () => {
     const [id, metadata, ownership] = song;
     return (
       <>
-        <div className="w-36 h-36">
-          <img
-            src={metadata[5]} // coverImage URL
-            className="aspect-square rounded-md w-full h-full object-cover"
-            alt={metadata[3]} // title
-          />
+        <div className="relative flex">
+          <div className="w-36 h-36">
+            <img
+              src={metadata[5]} // coverImage URL
+              className="aspect-square rounded-md w-full h-full object-cover"
+              alt={metadata[3]} // title
+            />
+          </div>
+          <div className="w-10 h-10 bg-primary z-10 -bottom-3 -right-2 absolute rounded-full flex items-center justify-center text-white">
+            <PlayCircle />
+          </div>
         </div>
+
         <div>
           <p
             className="w-full text-center truncate max-w-xs mx-auto"

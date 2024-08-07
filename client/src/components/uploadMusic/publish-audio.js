@@ -178,6 +178,7 @@ const PublishAudio = ({ getSongs }) => {
       );
 
       const res = await contract.createNFT(dummyPayload);
+      await res.wait(1);
       console.log(res);
       setIsLoading(false);
       setIsPublishAlertOpen(false);
