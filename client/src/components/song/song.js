@@ -29,7 +29,7 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="scroll-m-20 border-b pb-4 mt-2 text-3xl font-semibold tracking-tight sticky top-0 z-[50]  bg-opacity-80 backdrop-blur-md w-full flex items-center gap-4"
+        className="scroll-m-20 border-b pb-4 pt-2 text-3xl font-semibold tracking-tight sticky top-0 z-[50] bg-background w-full flex items-center gap-4"
       >
         <div
           className="hover:bg-muted text-foreground p-1.5 cursor-pointer rounded-full"
@@ -40,7 +40,7 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
         Song Details
       </motion.div>
 
-      <div className="flex flex-col md:flex-row gap-8 px-4 md:px-8">
+      <div className="flex flex-col md:flex-row gap-8 px-4 md:px-8 pb-72">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
