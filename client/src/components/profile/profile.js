@@ -63,28 +63,31 @@ const Profile = () => {
     }
   }, [w0, ready, authenticated]);
 
-  const renderTrackItem = (track) => (
-    <>
-      <div className="w-36 h-36">
-        <img
-          src={track.cover}
-          className="aspect-square rounded-md w-full h-full object-cover"
-          alt={track.title}
-        />
-      </div>
-      <div>
-        <p
-          className="w-full text-center truncate max-w-xs mx-auto"
-          title={track.title}
-        >
-          {track.title}
-        </p>
-        <p className="text-sm text-center text-muted-foreground">
-          {track.artist}
-        </p>
-      </div>
-    </>
-  );
+  const renderTrackItem = (song) => {
+    const [id, metadata, ownership] = song;
+    return (
+      <>
+        <div className="w-36 h-36">
+          <img
+            src={metadata[5]} // coverImage URL
+            className="aspect-square rounded-md w-full h-full object-cover"
+            alt={metadata[3]} // title
+          />
+        </div>
+        <div>
+          <p
+            className="w-full text-center truncate max-w-xs mx-auto"
+            title={metadata[3]} // title
+          >
+            {metadata[3]}
+          </p>
+          <p className="text-sm text-center text-muted-foreground">
+            {metadata[4]}
+          </p>
+        </div>
+      </>
+    );
+  };
 
   const renderPlaylistItem = (playlist) => (
     <>
@@ -113,7 +116,7 @@ const Profile = () => {
     <div className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide">
       <div className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between">
         GM Ser!
-        <PublishAudio />
+        <PublishAudio getSongs={getSongs} w0={w0} />
       </div>
 
       <div className="flex w-full gap-3 items-center">
@@ -130,7 +133,7 @@ const Profile = () => {
       </div>
 
       <div className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
-        Your NFS's
+        Your NFTs
       </div>
       {loading ? (
         <p>Loading...</p>

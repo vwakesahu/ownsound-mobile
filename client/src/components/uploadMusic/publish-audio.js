@@ -23,7 +23,8 @@ import { useWallets } from "@privy-io/react-auth";
 import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import { Contract } from "ethers";
 
-const PublishAudio = () => {
+const PublishAudio = ({ getSongs }) => {
+  const [isPublishAlertOpen, setIsPublishAlertOpen] = useState(false);
   const { wallets } = useWallets();
   const w0 = wallets[0];
   const [musicFile, setMusicFile] = useState(null);
@@ -36,7 +37,8 @@ const PublishAudio = () => {
   const [basePrice, setBasePrice] = useState("");
   const [royaltyPrice, setRoyaltyPrice] = useState("");
   const [royaltyPercentage, setRoyaltyPercentage] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     songName: "",
     songDescription: "",
@@ -91,14 +93,34 @@ const PublishAudio = () => {
       }
     }
   };
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageSrc(reader.result);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "fi0lxkc1"); // This should be an unsigned upload preset
+        formData.append("api_key", "697773597345229"); // Your API key
+
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/da9h8exvs/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`Upload failed: ${errorData.error.message}`);
+        }
+
+        const data = await response.json();
+        setImageSrc(data.secure_url);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        // Handle the error (e.g., show an error message to the user)
+      }
     }
   };
 
@@ -121,27 +143,8 @@ const PublishAudio = () => {
   };
 
   const handleSubmit = async () => {
-    // const formData = new FormData();
-    // formData.append("songName", songName);
-    // formData.append("songDescription", songDescription);
-    // formData.append("basePrice", basePrice);
-    // formData.append("royaltyPrice", royaltyPrice);
-    // formData.append("royaltyPercentage", royaltyPercentage);
-    // formData.append("isRentingAllowed", isRentingAllowed);
-
-    // if (musicFile) {
-    //   formData.append("musicFile", musicFile);
-    // }
-
-    // if (imageSrc) {
-    //   formData.append("coverImage", imageSrc);
-    // }
-
-    // // Log data for debugging
-    // console.log("Form Data:");
-    // for (const [key, value] of formData.entries()) {
-    //   console.log(`${key}: ${value}`);
-    // }
+    setErrorMessage("");
+    setIsLoading(true);
 
     const dummyPayload = {
       basePrice: basePrice,
@@ -149,24 +152,22 @@ const PublishAudio = () => {
       fullRoyaltyBuyoutPrice: 1000,
       title: songName,
       description: songDescription,
-      coverImage:
-        "https://imageio.forbes.com/specials-images/imageserve/6170e01f8d7639b95a7f2eeb/Sotheby-s-NFT-Natively-Digital-1-2-sale-Bored-Ape-Yacht-Club--8817-by-Yuga-Labs/0x0.png?format=png&width=960",
+      coverImage: imageSrc,
       mp3FileLocationId:
         "bafybeic5zcykf7fpg7c2zuf76p2gddegxlt64hbfp76qqs7l4l6yx3nraa",
       isRentingAllowed: isRentingAllowed,
       supply: 1,
       royaltyPercentage: royaltyPercentage,
     };
+
     try {
       const provider = await w0?.getEthersProvider();
       if (!provider) {
-        console.error("Provider is not available:", provider);
         throw new Error("Provider is not available");
       }
 
       const signer = await provider.getSigner();
       if (!signer) {
-        console.error("Signer is not available:", signer);
         throw new Error("Signer is not available");
       }
 
@@ -178,13 +179,13 @@ const PublishAudio = () => {
 
       const res = await contract.createNFT(dummyPayload);
       console.log(res);
-      // setSongs(res);
-      // setLoading(false);
+      setIsLoading(false);
+      setIsPublishAlertOpen(false);
+      await getSongs(w0.address);
     } catch (error) {
-      console.error("Error fetching songs:", error);
-      // toast.error("Failed to fetch songs");
-      // setError(true);
-      // setLoading(false);
+      setIsLoading(false);
+      console.error("Error creating NFT:", error);
+      setErrorMessage("Failed to create NFT. Please try again.");
     }
   };
 
@@ -193,7 +194,10 @@ const PublishAudio = () => {
   // console.log(data);
 
   return (
-    <AlertDialog>
+    <AlertDialog
+      open={isPublishAlertOpen}
+      onOpenChange={(e) => setIsPublishAlertOpen(e)}
+    >
       <AlertDialogTrigger>
         <Button variant="outline" className="w-full h-full">
           Publish Audio
@@ -339,6 +343,9 @@ const PublishAudio = () => {
                   <Percent className="text-muted-foreground w-4" />
                 </div>
               </div>
+              {errorMessage && (
+                <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
+              )}
             </>
           )}
         </div>
@@ -356,9 +363,9 @@ const PublishAudio = () => {
               </Button>
               <Button
                 onClick={handleSubmit}
-                disabled={!songName || !songDescription}
+                disabled={!songName || !songDescription || isLoading}
               >
-                Upload
+                {isLoading ? "Uploading..." : "Upload"}
               </Button>
             </>
           )}
