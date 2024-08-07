@@ -112,7 +112,11 @@ export function ResizableComponent({
           </div>
           <div className="flex items-center gap-2 font-semibold text-primary">
             {isLoadingBalance ? (
-              <Loader />
+              <div className="w-full grid items-center justify-end">
+                <div className="flex">
+                  <Loader noWidth={true} />
+                </div>
+              </div>
             ) : musicXBalance <= 0 ? (
               <ContactAbhi />
             ) : (
