@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { setMusicPlayer } from "@/redux/musicPlayerSlice";
 import TrackItem from "./track-item";
 import PlaylistItem from "./playlist-item";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Profile = () => {
   const { authenticated, ready } = usePrivy();
@@ -72,59 +73,129 @@ const Profile = () => {
     }
   }, [w0, ready, authenticated]);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  };
+
   return (
-    <div className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide">
-      <div className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background">
+    <motion.div
+      className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div
+        className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background"
+        variants={itemVariants}
+      >
         GM Ser!
         <PublishAudio getSongs={getSongs} w0={w0} />
-      </div>
+      </motion.div>
 
-      <div className="flex w-full gap-3 items-center">
-        <div className="w-24 h-24 relative">
+      <motion.div
+        className="flex w-full gap-3 items-center"
+        variants={itemVariants}
+      >
+        <motion.div
+          className="w-24 h-24 relative"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           <img src="/nft.avif" className="rounded-lg" />
-          <div className="w-6 h-6 flex items-center justify-center absolute bg-muted z-10 -bottom-2 -right-2 rounded-full cursor-pointer drop-shadow">
+          <motion.div
+            className="w-6 h-6 flex items-center justify-center absolute bg-muted z-10 -bottom-2 -right-2 rounded-full cursor-pointer drop-shadow"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
             <PencilIcon className="w-3" />
-          </div>
-        </div>
-        <div className="flex flex-col gap-3">
+          </motion.div>
+        </motion.div>
+        <motion.div className="flex flex-col gap-3" variants={itemVariants}>
           <Label>Username</Label>
           <Input placeholder="Change username" className="max-w-xs" />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
+      <motion.div
+        className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0"
+        variants={itemVariants}
+      >
         Your NFS's
-      </div>
-      {loading ? (
-        <div className="grid place-items-center min-h-32">
-          <Loader />
-        </div>
-      ) : error ? (
-        <p>Error loading songs</p>
-      ) : songs.length === 0 ? (
-        <div className="w-full h-32 flex items-center justify-center">
-          <div className="w-20 h-20">
-            <Lottie animationData={animationData} />
-          </div>
-          <p className="text-muted-foreground">No NFS's found!</p>
-        </div>
-      ) : (
+      </motion.div>
+      <AnimatePresence>
+        {loading ? (
+          <motion.div
+            className="grid place-items-center min-h-32"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Loader />
+          </motion.div>
+        ) : error ? (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            Error loading songs
+          </motion.p>
+        ) : songs.length === 0 ? (
+          <motion.div
+            className="w-full h-32 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="w-20 h-20">
+              <Lottie animationData={animationData} />
+            </div>
+            <p className="text-muted-foreground">No NFS's found!</p>
+          </motion.div>
+        ) : (
+          <motion.div variants={itemVariants}>
+            <HorizontalScroll
+              items={songs}
+              renderItem={(song) => <TrackItem song={song} />}
+              containerId={`scrollContainer-${uuidv4()}`}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0"
+        variants={itemVariants}
+      >
+        Your Playlist
+      </motion.div>
+      <motion.div variants={itemVariants}>
         <HorizontalScroll
-          items={songs}
-          renderItem={(song) => <TrackItem song={song} />}
+          items={playlists}
+          renderItem={(playlist) => <PlaylistItem playlist={playlist} />}
           containerId={`scrollContainer-${uuidv4()}`}
         />
-      )}
-
-      <div className="scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
-        Your Playlist
-      </div>
-      <HorizontalScroll
-        items={playlists}
-        renderItem={(playlist) => <PlaylistItem playlist={playlist} />}
-        containerId={`scrollContainer-${uuidv4()}`}
-      />
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
