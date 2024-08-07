@@ -15,6 +15,7 @@ import { BiHomeAlt2 } from "react-icons/bi";
 import { CiGlobe } from "react-icons/ci";
 import Profile from "./profile/profile";
 import Explore from "./explore/explore";
+import { ContactAbhi } from "./contact-abhi";
 
 export function ResizableComponent({
   w0,
@@ -55,7 +56,7 @@ export function ResizableComponent({
             
           </div>
           <div className="flex items-center gap-2 font-semibold text-primary">
-            <p>500</p>
+            <ContactAbhi/>
             <Image
               src={"/icons/token-coin.svg"}
               width={25}
