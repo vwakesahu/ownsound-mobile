@@ -22,11 +22,10 @@ import { Contract } from "ethers";
 import { musicXContractABI, musicXContractAddress } from "@/utils/contract";
 import { usePrivy } from "@privy-io/react-auth";
 import Loader from "./loader";
+import Song from "./song/song";
 
 export function ResizableComponent({
   w0,
-  // musicPlayer,
-  // setMusicPlayer,
   selectedMode,
   setSelectedMode,
   selectedLayout,
@@ -157,12 +156,6 @@ export function ResizableComponent({
       <ResizableHandle />
       <ResizablePanel defaultSize={120}>
         <div className="p-6">
-          {/* {selectedLayout === "profile" && (
-            <div className="w-full flex items-center justify-end">
-              <PublishAudio />
-            </div>
-          )} */}
-
           {selectedLayout === "home" && <div className="mt-10">Home</div>}
           {selectedLayout === "song" && (
             <div className="h-full flex items-center justify-center mt-10">
@@ -175,7 +168,15 @@ export function ResizableComponent({
             </div>
           )}
           {selectedLayout === "profile" && <Profile />}
-          {selectedLayout === "explore" && <Explore />}
+          {selectedLayout === "explore" && (
+            <Explore setSelectedLayout={setSelectedLayout} />
+          )}
+          {selectedLayout.includes("view-song") && (
+            <Song
+              selectedLayout={selectedLayout}
+              setSelectedLayout={setSelectedLayout}
+            />
+          )}
         </div>
       </ResizablePanel>
       <ResizableHandle />
