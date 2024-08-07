@@ -40,7 +40,7 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
         Song Details
       </motion.div>
 
-      <div className="flex flex-col md:flex-row gap-8 px-4 md:px-8 pb-72">
+      <div className="flex flex-col md:flex-row gap-8 px-4 md:px-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}

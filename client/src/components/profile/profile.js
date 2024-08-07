@@ -12,9 +12,6 @@ import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import Loader from "../loader";
 import Lottie from "lottie-react";
 import animationData from "@/animations/no.json";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setMusicPlayer } from "@/redux/musicPlayerSlice";
 import TrackItem from "./track-item";
 import PlaylistItem from "./playlist-item";
 import { motion, AnimatePresence } from "framer-motion";
@@ -115,11 +112,7 @@ const Profile = () => {
         className="flex w-full gap-3 items-center"
         variants={itemVariants}
       >
-        <motion.div
-          className="w-24 h-24 relative"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
+        <motion.div className="w-24 h-24 relative">
           <img src="/nft.avif" className="rounded-lg" />
           <motion.div
             className="w-6 h-6 flex items-center justify-center absolute bg-muted z-10 -bottom-2 -right-2 rounded-full cursor-pointer drop-shadow"
