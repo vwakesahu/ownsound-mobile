@@ -1,18 +1,10 @@
 export const OWNSOUNDABI = [
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "musicxTokenAddress",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "protocolFeeAddress",
-        type: "address",
-      },
+      { internalType: "address", name: "musicxTokenAddress", type: "address" },
+      { internalType: "address", name: "protocolFeeAddress", type: "address" },
     ],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "constructor",
   },
   {
@@ -30,12 +22,7 @@ export const OWNSOUNDABI = [
         name: "spender",
         type: "address",
       },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
+      { indexed: true, internalType: "uint256", name: "id", type: "uint256" },
     ],
     name: "Approval",
     type: "event",
@@ -55,12 +42,7 @@ export const OWNSOUNDABI = [
         name: "operator",
         type: "address",
       },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "approved",
-        type: "bool",
-      },
+      { indexed: false, internalType: "bool", name: "approved", type: "bool" },
     ],
     name: "ApprovalForAll",
     type: "event",
@@ -120,6 +102,25 @@ export const OWNSOUNDABI = [
       },
     ],
     name: "NFTMinted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "buyer",
+        type: "address",
+      },
+    ],
+    name: "NFTPurchased",
     type: "event",
   },
   {
@@ -200,24 +201,9 @@ export const OWNSOUNDABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
+      { indexed: true, internalType: "address", name: "from", type: "address" },
+      { indexed: true, internalType: "address", name: "to", type: "address" },
+      { indexed: true, internalType: "uint256", name: "id", type: "uint256" },
     ],
     name: "Transfer",
     type: "event",
@@ -240,8 +226,23 @@ export const OWNSOUNDABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    inputs: [
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+      { internalType: "bool", name: "_fullRoyaltyAllowed", type: "bool" },
+      {
+        internalType: "uint256",
+        name: "_fullRoyaltyBuyoutPrice",
+        type: "uint256",
+      },
+    ],
     name: "buyFullRoyalty",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    name: "buyNFT",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -251,11 +252,7 @@ export const OWNSOUNDABI = [
       {
         components: [
           { internalType: "uint256", name: "basePrice", type: "uint256" },
-          {
-            internalType: "bool",
-            name: "fullRoyaltyAllowed",
-            type: "bool",
-          },
+          { internalType: "bool", name: "fullRoyaltyAllowed", type: "bool" },
           {
             internalType: "uint256",
             name: "fullRoyaltyBuyoutPrice",
@@ -264,16 +261,8 @@ export const OWNSOUNDABI = [
           { internalType: "string", name: "title", type: "string" },
           { internalType: "string", name: "description", type: "string" },
           { internalType: "string", name: "coverImage", type: "string" },
-          {
-            internalType: "string",
-            name: "mp3FileLocationId",
-            type: "string",
-          },
-          {
-            internalType: "bool",
-            name: "isRentingAllowed",
-            type: "bool",
-          },
+          { internalType: "string", name: "mp3FileLocationId", type: "string" },
+          { internalType: "bool", name: "isRentingAllowed", type: "bool" },
           { internalType: "uint256", name: "supply", type: "uint256" },
           {
             internalType: "uint256",
@@ -281,7 +270,7 @@ export const OWNSOUNDABI = [
             type: "uint256",
           },
         ],
-        internalType: "struct OwnSoundNFS.CreateNFTParams",
+        internalType: "struct OwnSound.CreateNFTParams",
         name: "params",
         type: "tuple",
       },
@@ -307,11 +296,7 @@ export const OWNSOUNDABI = [
           { internalType: "uint256", name: "tokenId", type: "uint256" },
           {
             components: [
-              {
-                internalType: "uint256",
-                name: "basePrice",
-                type: "uint256",
-              },
+              { internalType: "uint256", name: "basePrice", type: "uint256" },
               {
                 internalType: "bool",
                 name: "fullRoyaltyAllowed",
@@ -323,54 +308,34 @@ export const OWNSOUNDABI = [
                 type: "uint256",
               },
               { internalType: "string", name: "title", type: "string" },
-              {
-                internalType: "string",
-                name: "description",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "coverImage",
-                type: "string",
-              },
+              { internalType: "string", name: "description", type: "string" },
+              { internalType: "string", name: "coverImage", type: "string" },
               {
                 internalType: "string",
                 name: "mp3FileLocationId",
                 type: "string",
               },
-              {
-                internalType: "bool",
-                name: "isRentingAllowed",
-                type: "bool",
-              },
-              {
-                internalType: "uint256",
-                name: "supply",
-                type: "uint256",
-              },
+              { internalType: "bool", name: "isRentingAllowed", type: "bool" },
+              { internalType: "uint256", name: "supply", type: "uint256" },
               {
                 internalType: "uint256",
                 name: "royaltyPercentage",
                 type: "uint256",
               },
-              {
-                internalType: "address",
-                name: "creator",
-                type: "address",
-              },
+              { internalType: "address", name: "creator", type: "address" },
               {
                 internalType: "uint256",
                 name: "remainingSupply",
                 type: "uint256",
               },
             ],
-            internalType: "struct OwnSoundNFS.NFTMetadata",
+            internalType: "struct OwnSound.NFTMetadata",
             name: "metadata",
             type: "tuple",
           },
           { internalType: "address", name: "creator", type: "address" },
         ],
-        internalType: "struct OwnSoundNFS.TokenInfo[]",
+        internalType: "struct OwnSound.TokenInfo[]",
         name: "",
         type: "tuple[]",
       },
@@ -392,11 +357,7 @@ export const OWNSOUNDABI = [
       {
         components: [
           { internalType: "uint256", name: "basePrice", type: "uint256" },
-          {
-            internalType: "bool",
-            name: "fullRoyaltyAllowed",
-            type: "bool",
-          },
+          { internalType: "bool", name: "fullRoyaltyAllowed", type: "bool" },
           {
             internalType: "uint256",
             name: "fullRoyaltyBuyoutPrice",
@@ -405,16 +366,8 @@ export const OWNSOUNDABI = [
           { internalType: "string", name: "title", type: "string" },
           { internalType: "string", name: "description", type: "string" },
           { internalType: "string", name: "coverImage", type: "string" },
-          {
-            internalType: "string",
-            name: "mp3FileLocationId",
-            type: "string",
-          },
-          {
-            internalType: "bool",
-            name: "isRentingAllowed",
-            type: "bool",
-          },
+          { internalType: "string", name: "mp3FileLocationId", type: "string" },
+          { internalType: "bool", name: "isRentingAllowed", type: "bool" },
           { internalType: "uint256", name: "supply", type: "uint256" },
           {
             internalType: "uint256",
@@ -422,13 +375,9 @@ export const OWNSOUNDABI = [
             type: "uint256",
           },
           { internalType: "address", name: "creator", type: "address" },
-          {
-            internalType: "uint256",
-            name: "remainingSupply",
-            type: "uint256",
-          },
+          { internalType: "uint256", name: "remainingSupply", type: "uint256" },
         ],
-        internalType: "struct OwnSoundNFS.NFTMetadata",
+        internalType: "struct OwnSound.NFTMetadata",
         name: "",
         type: "tuple",
       },
@@ -442,24 +391,14 @@ export const OWNSOUNDABI = [
     outputs: [
       {
         components: [
+          { internalType: "bool", name: "purchased", type: "bool" },
+          { internalType: "bool", name: "isRenting", type: "bool" },
+          { internalType: "uint256", name: "rentPrice", type: "uint256" },
           { internalType: "address", name: "renter", type: "address" },
-          {
-            internalType: "uint256",
-            name: "rentBaseAmount",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "rentDuration",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "rentEndTime",
-            type: "uint256",
-          },
+          { internalType: "uint256", name: "rentDuration", type: "uint256" },
+          { internalType: "uint256", name: "rentEndTime", type: "uint256" },
         ],
-        internalType: "struct OwnSoundNFS.RentInfo",
+        internalType: "struct OwnSound.OwnershipInfo",
         name: "",
         type: "tuple",
       },
@@ -476,11 +415,7 @@ export const OWNSOUNDABI = [
           { internalType: "uint256", name: "tokenId", type: "uint256" },
           {
             components: [
-              {
-                internalType: "uint256",
-                name: "basePrice",
-                type: "uint256",
-              },
+              { internalType: "uint256", name: "basePrice", type: "uint256" },
               {
                 internalType: "bool",
                 name: "fullRoyaltyAllowed",
@@ -492,68 +427,37 @@ export const OWNSOUNDABI = [
                 type: "uint256",
               },
               { internalType: "string", name: "title", type: "string" },
-              {
-                internalType: "string",
-                name: "description",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "coverImage",
-                type: "string",
-              },
+              { internalType: "string", name: "description", type: "string" },
+              { internalType: "string", name: "coverImage", type: "string" },
               {
                 internalType: "string",
                 name: "mp3FileLocationId",
                 type: "string",
               },
-              {
-                internalType: "bool",
-                name: "isRentingAllowed",
-                type: "bool",
-              },
-              {
-                internalType: "uint256",
-                name: "supply",
-                type: "uint256",
-              },
+              { internalType: "bool", name: "isRentingAllowed", type: "bool" },
+              { internalType: "uint256", name: "supply", type: "uint256" },
               {
                 internalType: "uint256",
                 name: "royaltyPercentage",
                 type: "uint256",
               },
-              {
-                internalType: "address",
-                name: "creator",
-                type: "address",
-              },
+              { internalType: "address", name: "creator", type: "address" },
               {
                 internalType: "uint256",
                 name: "remainingSupply",
                 type: "uint256",
               },
             ],
-            internalType: "struct OwnSoundNFS.NFTMetadata",
+            internalType: "struct OwnSound.NFTMetadata",
             name: "metadata",
             type: "tuple",
           },
-          {
-            internalType: "uint256",
-            name: "rentBaseAmount",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "rentDuration",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "currentOwner",
-            type: "address",
-          },
+          { internalType: "uint256", name: "rentBaseAmount", type: "uint256" },
+          { internalType: "uint256", name: "rentDuration", type: "uint256" },
+          { internalType: "address", name: "currentOwner", type: "address" },
+          { internalType: "bool", name: "isRenting", type: "bool" },
         ],
-        internalType: "struct OwnSoundNFS.RentableTokenInfo[]",
+        internalType: "struct OwnSound.RentableTokenInfo[]",
         name: "",
         type: "tuple[]",
       },
@@ -570,11 +474,7 @@ export const OWNSOUNDABI = [
           { internalType: "uint256", name: "tokenId", type: "uint256" },
           {
             components: [
-              {
-                internalType: "uint256",
-                name: "basePrice",
-                type: "uint256",
-              },
+              { internalType: "uint256", name: "basePrice", type: "uint256" },
               {
                 internalType: "bool",
                 name: "fullRoyaltyAllowed",
@@ -586,80 +486,50 @@ export const OWNSOUNDABI = [
                 type: "uint256",
               },
               { internalType: "string", name: "title", type: "string" },
-              {
-                internalType: "string",
-                name: "description",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "coverImage",
-                type: "string",
-              },
+              { internalType: "string", name: "description", type: "string" },
+              { internalType: "string", name: "coverImage", type: "string" },
               {
                 internalType: "string",
                 name: "mp3FileLocationId",
                 type: "string",
               },
-              {
-                internalType: "bool",
-                name: "isRentingAllowed",
-                type: "bool",
-              },
-              {
-                internalType: "uint256",
-                name: "supply",
-                type: "uint256",
-              },
+              { internalType: "bool", name: "isRentingAllowed", type: "bool" },
+              { internalType: "uint256", name: "supply", type: "uint256" },
               {
                 internalType: "uint256",
                 name: "royaltyPercentage",
                 type: "uint256",
               },
-              {
-                internalType: "address",
-                name: "creator",
-                type: "address",
-              },
+              { internalType: "address", name: "creator", type: "address" },
               {
                 internalType: "uint256",
                 name: "remainingSupply",
                 type: "uint256",
               },
             ],
-            internalType: "struct OwnSoundNFS.NFTMetadata",
+            internalType: "struct OwnSound.NFTMetadata",
             name: "metadata",
             type: "tuple",
           },
           {
             components: [
-              {
-                internalType: "address",
-                name: "renter",
-                type: "address",
-              },
-              {
-                internalType: "uint256",
-                name: "rentBaseAmount",
-                type: "uint256",
-              },
+              { internalType: "bool", name: "purchased", type: "bool" },
+              { internalType: "bool", name: "isRenting", type: "bool" },
+              { internalType: "uint256", name: "rentPrice", type: "uint256" },
+              { internalType: "address", name: "renter", type: "address" },
               {
                 internalType: "uint256",
                 name: "rentDuration",
                 type: "uint256",
               },
-              {
-                internalType: "uint256",
-                name: "rentEndTime",
-                type: "uint256",
-              },
+              { internalType: "uint256", name: "rentEndTime", type: "uint256" },
             ],
-            internalType: "struct OwnSoundNFS.RentInfo",
-            name: "rentInfo",
+            internalType: "struct OwnSound.OwnershipInfo",
+            name: "ownershipInfo",
             type: "tuple",
           },
         ],
-        internalType: "struct OwnSoundNFS.WalletTokenInfo[]",
+        internalType: "struct OwnSound.WalletTokenInfo[]",
         name: "",
         type: "tuple[]",
       },
@@ -675,13 +545,6 @@ export const OWNSOUNDABI = [
     name: "isApprovedForAll",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
-    name: "mintNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -705,24 +568,12 @@ export const OWNSOUNDABI = [
       { internalType: "string", name: "title", type: "string" },
       { internalType: "string", name: "description", type: "string" },
       { internalType: "string", name: "coverImage", type: "string" },
-      {
-        internalType: "string",
-        name: "mp3FileLocationId",
-        type: "string",
-      },
+      { internalType: "string", name: "mp3FileLocationId", type: "string" },
       { internalType: "bool", name: "isRentingAllowed", type: "bool" },
       { internalType: "uint256", name: "supply", type: "uint256" },
-      {
-        internalType: "uint256",
-        name: "royaltyPercentage",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "royaltyPercentage", type: "uint256" },
       { internalType: "address", name: "creator", type: "address" },
-      {
-        internalType: "uint256",
-        name: "remainingSupply",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "remainingSupply", type: "uint256" },
     ],
     stateMutability: "view",
     type: "function",
@@ -735,15 +586,16 @@ export const OWNSOUNDABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "rentInfo",
+    inputs: [
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "address", name: "", type: "address" },
+    ],
+    name: "ownershipInfo",
     outputs: [
+      { internalType: "bool", name: "purchased", type: "bool" },
+      { internalType: "bool", name: "isRenting", type: "bool" },
+      { internalType: "uint256", name: "rentPrice", type: "uint256" },
       { internalType: "address", name: "renter", type: "address" },
-      {
-        internalType: "uint256",
-        name: "rentBaseAmount",
-        type: "uint256",
-      },
       { internalType: "uint256", name: "rentDuration", type: "uint256" },
       { internalType: "uint256", name: "rentEndTime", type: "uint256" },
     ],
@@ -793,11 +645,7 @@ export const OWNSOUNDABI = [
   {
     inputs: [
       { internalType: "uint256", name: "tokenId", type: "uint256" },
-      {
-        internalType: "uint256",
-        name: "rentBaseAmount",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "rentPrice", type: "uint256" },
       { internalType: "uint256", name: "rentDuration", type: "uint256" },
     ],
     name: "setRentInfo",

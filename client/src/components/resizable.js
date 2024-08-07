@@ -43,14 +43,26 @@ export function ResizableComponent({
   return (
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel defaultSize={50}>
-        <div className="flex items-center gap-3 w-full p-6 dark:bg-muted/10 bg-muted border-b">
-          <Image
-            src={"/icons/token-coin.svg"}
-            width={25}
-            height={25}
-            alt="coin"
-          />
-          <p className="">Own Sound</p>
+        <div className="w-full p-6 dark:bg-muted/10 bg-muted border-b flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* <Image
+              src={"/icons/token-coin.svg"}
+              width={25}
+              height={25}
+              alt="coin"
+            /> */}
+            <p className="">Own Sound</p>
+            
+          </div>
+          <div className="flex items-center gap-2 font-semibold text-primary">
+            <p>500</p>
+            <Image
+              src={"/icons/token-coin.svg"}
+              width={25}
+              height={25}
+              alt="coin"
+            />
+          </div>
         </div>
         <div className="flex flex-col space-y-6 p-4 mt-4">
           {menuItems.map((item) => {
