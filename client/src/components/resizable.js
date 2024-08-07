@@ -117,7 +117,7 @@ export function ResizableComponent({
             {isLoadingBalance ? (
               <motion.div
                 key="loader"
-                className="w-full grid items-center justify-end"
+                className="grid items-center justify-end"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
@@ -217,7 +217,7 @@ export function ResizableComponent({
           )}
           {selectedLayout === "profile" && <Profile />}
           {selectedLayout === "explore" && (
-            <Explore setSelectedLayout={setSelectedLayout} />
+            <Explore setSelectedLayout={setSelectedLayout} w0={w0} />
           )}
           {selectedLayout.includes("view-song") && (
             <Song
