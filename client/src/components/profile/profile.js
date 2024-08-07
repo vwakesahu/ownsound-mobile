@@ -10,6 +10,8 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { Contract } from "ethers";
 import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import Loader from "../loader";
+import Lottie from "lottie-react";
+import animationData from "@/animations/no.json";
 
 const Profile = () => {
   const { authenticated, ready } = usePrivy();
@@ -149,6 +151,13 @@ const Profile = () => {
         </div>
       ) : error ? (
         <p>Error loading songs</p>
+      ) : songs.length === 0 ? (
+        <div className="w-full h-32 flex items-center justify-center">
+          <div className="w-20 h-20">
+            <Lottie animationData={animationData} />
+          </div>
+          <p className="text-muted-foreground">No NFS's found!</p>
+        </div>
       ) : (
         <HorizontalScroll
           items={songs}

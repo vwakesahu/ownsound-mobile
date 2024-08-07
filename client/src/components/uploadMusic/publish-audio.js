@@ -24,6 +24,8 @@ import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import { Contract } from "ethers";
 import { toast } from "sonner";
 import Loader from "../loader";
+import { Slider } from "../ui/slider";
+import { cn } from "@/lib/utils";
 
 const PublishAudio = ({ getSongs }) => {
   const [isMusicUploading, setIsMusicUploading] = useState(false);
@@ -41,9 +43,10 @@ const PublishAudio = ({ getSongs }) => {
   const [songDescription, setSongDescription] = useState("");
   const [basePrice, setBasePrice] = useState("");
   const [royaltyPrice, setRoyaltyPrice] = useState("");
-  const [royaltyPercentage, setRoyaltyPercentage] = useState("");
+  const [royaltyPercentage, setRoyaltyPercentage] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [fullRoyaltyAllowed, setFullRoyaltyAllowed] = useState(false);
   const [formData, setFormData] = useState({
     songName: "",
     songDescription: "",
@@ -88,6 +91,7 @@ const PublishAudio = ({ getSongs }) => {
         setMusicFile(file);
         setFileName(file.name);
       } catch (error) {
+        toast.error("Error uploading file");
         console.error("Error uploading file:", error);
       } finally {
         setIsMusicUploading(false);
@@ -148,7 +152,7 @@ const PublishAudio = ({ getSongs }) => {
 
     const dummyPayload = {
       basePrice: basePrice,
-      fullRoyaltyAllowed: true,
+      fullRoyaltyAllowed: fullRoyaltyAllowed,
       fullRoyaltyBuyoutPrice: royaltyPrice,
       title: songName,
       description: songDescription,
@@ -284,17 +288,17 @@ const PublishAudio = ({ getSongs }) => {
                           </label>
                         </div>
                       )}
-                     
                     </div>
                   )}
-                </div> <div className="h-16 flex flex-col justify-between">
-                        <Label>Song Name</Label>
-                        <Input
-                          placeholder="Enter song name"
-                          value={songName}
-                          onChange={(e) => setSongName(e.target.value)}
-                        />
-                      </div>
+                </div>{" "}
+                <div className="h-16 flex flex-col justify-between">
+                  <Label>Song Name</Label>
+                  <Input
+                    placeholder="Enter song name"
+                    value={songName}
+                    onChange={(e) => setSongName(e.target.value)}
+                  />
+                </div>
               </div>
 
               <div>
@@ -306,12 +310,19 @@ const PublishAudio = ({ getSongs }) => {
                   onChange={(e) => setSongDescription(e.target.value)}
                 />
               </div>
-              <div>
+              <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 pt-2">
                   <Label htmlFor="isRentingAllowed">Renting Allowed?</Label>
                   <Switch
                     id="isRentingAllowed"
                     onCheckedChange={(e) => setIsRentingAllowed(e)}
+                  />
+                </div>
+                <div className="flex items-center space-x-2 pt-2">
+                  <Label htmlFor="full-royalty">Full Royalty Allowed?</Label>
+                  <Switch
+                    id="full-royalty"
+                    onCheckedChange={(e) => setFullRoyaltyAllowed(e)}
                   />
                 </div>
               </div>
@@ -351,16 +362,21 @@ const PublishAudio = ({ getSongs }) => {
                   </div>
                 </div>
               </div>
+
               <div>
                 <Label>Royalty Percentage</Label>
                 <div className="flex items-center gap-3 w-full mt-2.5">
-                  <Input
-                    placeholder="Enter percentage"
-                    type="number"
-                    value={royaltyPercentage}
-                    onChange={(e) => setRoyaltyPercentage(e.target.value)}
+                  <Slider
+                    defaultValue={[0]}
+                    max={20}
+                    step={5}
+                    className={""}
+                    onValueChange={(e) => setRoyaltyPercentage(e)}
                   />
-                  <Percent className="text-muted-foreground w-4" />
+                  <div className="flex text-muted-foreground">
+                    {royaltyPercentage}
+                    <Percent className="text-muted-foreground w-4" />
+                  </div>
                 </div>
               </div>
               {errorMessage && (
