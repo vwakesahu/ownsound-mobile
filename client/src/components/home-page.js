@@ -3,7 +3,7 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 
 const HomePage = () => {
   const [homeImage, setHomeImage] = useState("https://images.tv9hindi.com/wp-content/uploads/2024/08/chin-tapak-dum-dum-1.png");
-  const [imageAspectRatio, setImageAspectRatio] = useState(16 / 9); // Default aspect ratio
+  const [imageAspectRatio, setImageAspectRatio] = useState(16 / 9);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -12,11 +12,13 @@ const HomePage = () => {
   const rotateY = useTransform(x, [-500, 500], [-5, 5]);
 
   useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      setImageAspectRatio(img.width / img.height);
-    };
-    img.src = homeImage;
+    if (typeof window !== 'undefined') {
+      const img = new window.Image();
+      img.onload = () => {
+        setImageAspectRatio(img.width / img.height);
+      };
+      img.src = homeImage;
+    }
   }, [homeImage]);
 
   function handleMouse(event) {
@@ -27,29 +29,76 @@ const HomePage = () => {
 
   return (
     <div 
-      className="w-full h-screen px-10 flex items-center justify-center bg-black overflow-hidden"
+      className="w-full h-screen px-10 flex items-center justify-center bg-gradient-to-br from-purple-900 via-black to-indigo-900 overflow-hidden"
       onMouseMove={handleMouse}
     >
       <motion.div
-        className="w-full h-full flex items-center justify-center"
-        style={{ rotateX, rotateY }}
+        className="w-full h-full flex flex-col items-center justify-center"
+        style={{ rotateX, rotateY, perspective: 1000 }}
         initial={{ opacity: 0, scale: 1.1 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ 
-          opacity: { duration: 1.5 },
-          scale: { duration: 1.5 }
-        }}
-        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 1.5 }}
       >
-        <motion.img
-          src={homeImage}
-          alt="Home Page Image"
-          className="max-w-full max-h-full object-contain"
-          style={{
-            width: `min(100%, ${imageAspectRatio * 80}vh)`,
-            height: `min(${100 / imageAspectRatio}%, 80vh)`
-          }}
-        />
+        <motion.div
+          className="relative"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-purple-500 rounded-full opacity-30 blur-xl"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              rotate: [0, 180, 360],
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+          />
+          <div 
+            style={{
+              width: `min(80vw, ${imageAspectRatio * 60}vh)`,
+              height: `min(${80 / imageAspectRatio}vw, 60vh)`,
+              position: 'relative'
+            }}
+          >
+            <img
+              src={homeImage}
+              alt="Home Page Image"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+              className="rounded-full shadow-2xl z-10 relative"
+            />
+          </div>
+          <motion.div
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'linear-gradient(45deg, rgba(168, 85, 247, 0.4) 0%, rgba(168, 85, 247, 0) 70%)',
+              zIndex: 20
+            }}
+            animate={{ 
+              rotate: 360,
+            }}
+            transition={{ 
+              duration: 20, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+          />
+        </motion.div>
+        
+        <motion.h1
+          className="mt-8 text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          Discover Your Sound
+        </motion.h1>
       </motion.div>
     </div>
   );
