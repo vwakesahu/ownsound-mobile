@@ -3,7 +3,7 @@ import React from "react";
 const TrackItem = ({ track, setSelectedLayout }) => (
   <div
     className="p-3 hover:bg-muted rounded-lg cursor-pointer"
-    onClick={() => setSelectedLayout("view-song/some")}
+    onClick={() => setSelectedLayout(`view-song/${track.id}`)}
   >
     <div className="w-36 h-36">
       <img

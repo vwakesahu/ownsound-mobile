@@ -6,16 +6,12 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const TrackItem = ({ song }) => {
-  console.log(song);
   const dispatch = useDispatch();
   const [id, metadata, ownership] = song;
   console.log(id.toString());
-  console.log(metadata);
 
   const playSong = async (id, meta) => {
-    console.log(meta[12].toString());
     const number = Number(meta[12].toString());
-    console.log(number);
     try {
       // const { data } = await axios.post(`/api/hashsong`, {
       //   randomId: number,

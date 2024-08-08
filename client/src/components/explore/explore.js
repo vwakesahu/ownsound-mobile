@@ -43,16 +43,18 @@ const Explore = ({ setSelectedLayout, w0 }) => {
       );
 
       const res = await contract.getAllTokensInfo();
-      const formattedTracks = res.map((track) => {
-        return {
-          id: track[0].toNumber(),
-          title: track[1][3],
-          artist: track[1][4],
-          cover: track[1][5],
-          price: track[1][0].toNumber(),
-          owner: track[2],
-        };
-      });
+      const formattedTracks = res
+        .map((track) => {
+          return {
+            id: track[0].toNumber(),
+            title: track[1][3],
+            artist: track[1][4],
+            cover: track[1][5],
+            price: track[1][0].toNumber(),
+            owner: track[2],
+          };
+        })
+        .reverse();
       setAudioTracks(formattedTracks);
     } catch (error) {
       console.log(error);
