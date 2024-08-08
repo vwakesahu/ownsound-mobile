@@ -77,6 +77,7 @@ const PublishAudio = ({ getSongs }) => {
 
         // Append music file
         data.append("musicFile", file);
+        data.append("userAddress", w0.address);
 
         const response = await axios.post("/api/endpoint", data, {
           headers: {
