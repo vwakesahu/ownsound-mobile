@@ -1,4 +1,4 @@
-[
+export const OWNSOUNDABI = [
   {
     inputs: [
       { internalType: "address", name: "musicxTokenAddress", type: "address" },
