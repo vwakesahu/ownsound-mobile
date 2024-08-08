@@ -150,8 +150,8 @@ const PublishAudio = ({ getSongs }) => {
   const handleSubmit = async () => {
     setErrorMessage("");
     setIsLoading(true);
-
-    const dummyPayload = {
+    console.log(value);
+    const createNFTParams = {
       basePrice: basePrice,
       fullRoyaltyAllowed: fullRoyaltyAllowed,
       fullRoyaltyBuyoutPrice: royaltyPrice,
@@ -163,6 +163,8 @@ const PublishAudio = ({ getSongs }) => {
       supply: 1,
       royaltyPercentage: royaltyPercentage,
     };
+
+    const randomNumber = value; // Ensure this is a valid uint256
 
     try {
       const provider = await w0?.getEthersProvider();
@@ -181,7 +183,7 @@ const PublishAudio = ({ getSongs }) => {
         signer
       );
 
-      const res = await contract.createNFT(dummyPayload);
+      const res = await contract.createNFT(createNFTParams, randomNumber);
       await res.wait(1);
       console.log(res);
       setIsLoading(false);
