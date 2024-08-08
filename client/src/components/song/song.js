@@ -65,7 +65,21 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
           .split("T")[0],
       };
 
-      setSongDetails(parsedDetails);
+      const rentTime = await contract.getRentableTokens();
+      const s = rentTime[0][1];
+      const rentDetails = {
+        songName: s[3],
+        songSymbol: s[4],
+        imageUrl: s[5],
+        isRentable: s[8],
+        rentPrice: s[9].toString(),
+        rentDuration: s[10],
+        ownerAddress: s[11],
+        rentStartTime: s[13],
+      };
+      console.log(rentDetails);
+
+      setSongDetails({ ...parsedDetails, rentPrice: rentDetails.rentPrice });
     } catch (error) {
       console.error("Error fetching song details:", error);
       toast.error("Failed to fetch song details");
@@ -177,40 +191,6 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
     }
   };
 
-  const approveContract = async () => {
-    try {
-      setApprovalLoading(true);
-      const provider = await w0?.getEthersProvider();
-      if (!provider) {
-        throw new Error("Provider is not available");
-      }
-
-      const signer = await provider.getSigner();
-      if (!signer) {
-        throw new Error("Signer is not available");
-      }
-
-      const contract = new Contract(
-        musicXContractAddress,
-        musicXContractABI,
-        signer
-      );
-
-      const approveTx = await contract.approve(
-        ownSoundContractAddress,
-        ethers.utils.parseEther(songDetails.price.toString()),
-        { gasLimit: 300000 }
-      );
-      await approveTx.wait(1);
-      setApprovalLoading(false);
-      toast.success("Approval successful. You can now purchase the NFT.");
-    } catch (error) {
-      console.error("Error approving transaction:", error);
-      toast.error("Failed to approve transaction. Please try again.");
-      setApprovalLoading(false);
-    }
-  };
-
   if (songDetailsLoading) {
     return <div className="text-center mt-8">Loading song details...</div>;
   }
@@ -294,11 +274,15 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
           <p className="text-muted-foreground mt-4">
             Created on: {songDetails.createdAt}
           </p>
-
+          {console.log(songId)}
           {songDetails.creator !== w0.address ? (
             <div className="flex items-center gap-3">
-              {isPurchased && songDetails.isRentable && (
-                <RentAlert metadata={songDetails} />
+              {songDetails.isRentable && (
+                <RentAlert
+                  metadata={songDetails}
+                  songId={songId}
+                  isowner={isPurchased}
+                />
               )}
               {!isPurchased && songDetails.isListed && (
                 <motion.button
