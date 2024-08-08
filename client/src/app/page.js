@@ -35,7 +35,7 @@ const Page = () => {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed w-full bottom-0 border-t p-4 bg-backgroundOpac backdrop-blur-xl grid grid-cols-3"
+        className="fixed w-full bottom-0 border-t p-4 bg-background backdrop-blur-xl grid grid-cols-3"
       >
         <AnimatePresence>
           <motion.div

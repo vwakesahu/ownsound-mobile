@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  uri: "",
-  isPlaying: false,
+  uri: "/audio/chin-tapak-dum-dum.mp3",
+  isPlaying: true,
   index: 0,
   coverImage: "",
   title: "",

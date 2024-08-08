@@ -31,7 +31,7 @@ export default function BottomAudioPlayer({ url }) {
       const handleEnded = () => {
         setPlaying(false);
         setCurrentTime(0);
-        handleNext("next");
+        //handleNext("next");
       };
 
       if (audio) {
