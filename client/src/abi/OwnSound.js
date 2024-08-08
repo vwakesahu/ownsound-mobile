@@ -1,4 +1,4 @@
-export const OWNSOUNDABI = [
+[
   {
     inputs: [
       { internalType: "address", name: "musicxTokenAddress", type: "address" },
@@ -512,6 +512,13 @@ export const OWNSOUNDABI = [
         type: "tuple[]",
       },
     ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "buyer", type: "address" }],
+    name: "getWalletPurchasedNFTs",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
     stateMutability: "view",
     type: "function",
   },

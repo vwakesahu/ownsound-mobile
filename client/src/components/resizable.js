@@ -24,6 +24,8 @@ import { usePrivy } from "@privy-io/react-auth";
 import Loader from "./loader";
 import Song from "./song/song";
 import HomePage from "./home-page";
+import { MdPlaylistAddCircle } from "react-icons/md";
+import Playlist from "./playlist/playlist";
 
 export function ResizableComponent({
   w0,
@@ -92,6 +94,7 @@ export function ResizableComponent({
     { name: "Home", icon: BiHomeAlt2 },
     { name: "Explore", icon: CiGlobe },
     { name: "Profile", icon: User },
+    { name: "Playlist", icon: MdPlaylistAddCircle },
   ];
   const handleClick = (item) => {
     setSelectedLayout(item.toLowerCase());
@@ -205,7 +208,11 @@ export function ResizableComponent({
       <ResizableHandle />
       <ResizablePanel defaultSize={120}>
         <div className="p-6">
-          {selectedLayout === "home" && <div className="mt-10"><HomePage /></div>}
+          {selectedLayout === "home" && (
+            <div className="mt-10">
+              <HomePage />
+            </div>
+          )}
           {selectedLayout === "song" && (
             <div className="h-full flex items-center justify-center mt-10">
               <img
@@ -222,6 +229,12 @@ export function ResizableComponent({
           )}
           {selectedLayout.includes("view-song") && (
             <Song
+              selectedLayout={selectedLayout}
+              setSelectedLayout={setSelectedLayout}
+            />
+          )}
+          {selectedLayout === "playlist" && (
+            <Playlist
               selectedLayout={selectedLayout}
               setSelectedLayout={setSelectedLayout}
             />
