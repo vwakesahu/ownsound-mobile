@@ -32,8 +32,7 @@ const Page = () => {
               Ownsound
             </h1>
             <p className="md:text-balance text-muted-foreground md:text-xl">
-              Prototype to demonstrate confidential ERC20 transfers using Inco
-              Network.
+              Your Music, Your Playlist, Your Privacy—Powered by Inco Network.
             </p>
           </div>
           <div className="flex items-center gap-3.5">
