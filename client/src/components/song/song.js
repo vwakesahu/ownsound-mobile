@@ -297,7 +297,7 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
 
           {songDetails.creator !== w0.address ? (
             <div className="flex items-center gap-3">
-              {!isPurchased && songDetails.isRentable && (
+              {isPurchased && songDetails.isRentable && (
                 <RentAlert metadata={songDetails} />
               )}
               {!isPurchased && songDetails.isListed && (
@@ -315,28 +315,11 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
                     : "Purchase Now"}
                 </motion.button>
               )}
-              {isPurchased && (
+              {/* {isPurchased && (
                 <p className="text-green-500 font-semibold">
                   You have already purchased this song.
                 </p>
-              )}
-              {(purchaseLoading || approvalLoading) && !isPurchased && (
-                <p className="text-red-500">
-                  It looks like you need to approve the contract to spend your
-                  tokens. Click the "Approve" button to continue.
-                </p>
-              )}
-              {approvalLoading && !isPurchased && (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="mt-6 bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl"
-                  onClick={approveContract}
-                  disabled={approvalLoading}
-                >
-                  {approvalLoading ? "Approving..." : "Approve"}
-                </motion.button>
-              )}
+              )} */}
             </div>
           ) : (
             <p className="text-red-500">
