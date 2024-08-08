@@ -39,10 +39,10 @@ const CreatePlaylistAlert = () => {
     try {
       const selectedSongs = selectedAudios.map((audio) => audio.id);
 
-      const { data } = await axios.post("http://localhost:3001/api/playlist", {
-        playlistName: playlistName,
-        selectedSongs: selectedSongs,
-        address: w0.address,
+      const { data } = await axios.post("/api/playlist", {
+        playName: playlistName,
+        playArray: selectedSongs,
+        rentalAdd: w0.address,
       });
 
       console.log("Playlist created:", data);
@@ -122,7 +122,7 @@ const CreatePlaylistAlert = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-lg"
+          className="bg-primary hover:bg-primary/70 text-white font-bold py-2 px-4 rounded-full shadow-lg"
         >
           Create Playlist
         </motion.button>
