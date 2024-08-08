@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   AlertDialog,
@@ -12,22 +12,101 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
-import { Check, X, Music } from "lucide-react";
+import { Check, X, Music, Loader2 } from "lucide-react";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { Contract } from "ethers";
+import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
+import axios from "axios";
+import Loader from "../loader";
+import { toast } from "sonner";
 
 const CreatePlaylistAlert = () => {
   const [selectedAudios, setSelectedAudios] = useState([]);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [playlistName, setPlaylistName] = useState("");
+  const [purchasedSongs, setPurchasedSongs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { authenticated, ready } = usePrivy();
+  const { wallets } = useWallets();
+  const w0 = wallets[0];
 
-  const dummyAudios = [
-    { id: 1, name: "Song 1 - Artist A" },
-    { id: 2, name: "Song 2 - Artist B" },
-    { id: 3, name: "Song 3 - Artist C" },
-    { id: 4, name: "Song 4 - Artist D" },
-    { id: 23, name: "Song 4 - Artist D" },
-    { id: 5, name: "Song 4 - Artist D" },
-    { id: 98, name: "Song 4 - Artist D" },
-    { id: 5, name: "Song 5 - Artist E" },
-  ];
+  const createPlaylist = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const selectedSongs = selectedAudios.map((audio) => audio.id);
+
+      const { data } = await axios.post("http://localhost:3001/api/playlist", {
+        playlistName: playlistName,
+        selectedSongs: selectedSongs,
+        address: w0.address,
+      });
+
+      console.log("Playlist created:", data);
+      toast.success("Playlist created successfully!");
+      setIsAlertOpen(false);
+      // Reset form
+      setPlaylistName("");
+      setSelectedAudios([]);
+    } catch (error) {
+      console.error("Error creating playlist:", error);
+      setError(
+        error.response?.data?.message ||
+          "Failed to create playlist. Please try again."
+      );
+      toast.error("Failed to create playlist. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getPurchasedSongs = async () => {
+    try {
+      const provider = await w0?.getEthersProvider();
+      if (!provider) {
+        throw new Error("Provider is not available");
+      }
+
+      const signer = await provider.getSigner();
+      if (!signer) {
+        throw new Error("Signer is not available");
+      }
+
+      const contract = new Contract(
+        ownSoundContractAddress,
+        ownSoundContractABI,
+        signer
+      );
+
+      const purchasedNFTs = await contract.getWalletPurchasedNFTs(w0.address);
+      console.log(purchasedNFTs);
+      const songsPromises = purchasedNFTs.map((song) =>
+        contract.nftMetadata(song)
+      );
+      const songs = await Promise.all(songsPromises);
+
+      // Transform the song data into a more usable format
+      const formattedSongs = songs.map((song, index) => ({
+        id: index,
+        title: song[3],
+        description: song[4],
+        image: song[5],
+      }));
+
+      setPurchasedSongs(formattedSongs);
+    } catch (error) {
+      console.error("Error fetching purchased songs:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (ready && authenticated && w0?.address !== undefined) {
+      getPurchasedSongs();
+    }
+  }, [ready, authenticated, w0?.address]);
 
   const toggleAudio = (audio) => {
     setSelectedAudios((prev) =>
@@ -38,7 +117,7 @@ const CreatePlaylistAlert = () => {
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isAlertOpen} onOpenChange={(e) => setIsAlertOpen(e)}>
       <AlertDialogTrigger asChild>
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -73,16 +152,17 @@ const CreatePlaylistAlert = () => {
                 className="border-gray-300 focus:ring-purple-500 focus:border-purple-500"
               />
             </div>
+            {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
 
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-gray-700">
                 Select Audio Tracks:
               </h4>
               <div className="max-h-48 overflow-y-auto border border-gray-200 rounded-md bg-white">
-                {dummyAudios.map((audio) => (
+                {purchasedSongs.map((audio) => (
                   <motion.div
                     key={audio.id}
-                    className={`flex items-center justify-between p-3 cursor-pointer ${
+                    className={`flex items-center p-3 cursor-pointer ${
                       selectedAudios.some((a) => a.id === audio.id)
                         ? "bg-purple-100"
                         : "hover:bg-gray-50"
@@ -91,9 +171,21 @@ const CreatePlaylistAlert = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <span className="text-gray-700">{audio.name}</span>
+                    <img
+                      src={audio.image}
+                      alt={audio.title}
+                      className="w-12 h-12 object-cover rounded-md mr-3"
+                    />
+                    <div className="flex-grow">
+                      <h3 className="text-sm font-medium text-gray-800">
+                        {audio.title}
+                      </h3>
+                      <p className="text-xs text-gray-500">
+                        {audio.description}
+                      </p>
+                    </div>
                     {selectedAudios.some((a) => a.id === audio.id) && (
-                      <Check className="h-5 w-5 text-purple-500" />
+                      <Check className="h-5 w-5 text-purple-500 ml-2" />
                     )}
                   </motion.div>
                 ))}
@@ -106,7 +198,7 @@ const CreatePlaylistAlert = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="space-y-2 h-24 overflow-y-auto"
+                  className="space-y-2 max-h-24 overflow-y-auto"
                 >
                   <h4 className="text-sm font-medium text-gray-700">
                     Selected Tracks:
@@ -120,7 +212,7 @@ const CreatePlaylistAlert = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
                       >
-                        {audio.name}
+                        {audio.title}
                         <X
                           className="h-4 w-4 ml-2 cursor-pointer text-purple-600 hover:text-purple-800"
                           onClick={(e) => {
@@ -143,8 +235,15 @@ const CreatePlaylistAlert = () => {
           <AlertDialogAction
             className="bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
             disabled={!playlistName || selectedAudios.length === 0}
+            onClick={createPlaylist}
           >
-            Create Playlist
+            {isLoading ? (
+              <>
+                <Loader2 className="animate-spin text-white w-20" />
+              </>
+            ) : (
+              "Create Playlist"
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
