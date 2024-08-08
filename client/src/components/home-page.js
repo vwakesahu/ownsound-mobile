@@ -27,7 +27,7 @@ const HomePage = () => {
 
   return (
     <div 
-      className="w-full h-screen px-10 flex items-center justify-center bg-black overflow-hidden"
+      className="w-full h-screen px-10 flex items-center justify-center bg-black overflow-hidden rounded-lg"
       onMouseMove={handleMouse}
     >
       <motion.div
