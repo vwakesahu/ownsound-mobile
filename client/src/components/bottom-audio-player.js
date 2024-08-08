@@ -91,6 +91,7 @@ export default function BottomAudioPlayer({ url }) {
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
   };
+  console.log(url);
 
   return (
     <div className="px-4 py-2 w-full flex items-center justify-between gap-3">

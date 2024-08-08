@@ -17,14 +17,14 @@ const TrackItem = ({ song }) => {
     const number = Number(meta[12].toString());
     console.log(number);
     try {
-      const { data } = await axios.post(`/api/hashsong`, {
-        randomId: number,
-      });
-      console.log(data);
+      // const { data } = await axios.post(`/api/hashsong`, {
+      //   randomId: number,
+      // });
+      // console.log(data);
 
       dispatch(
         setMusicPlayer({
-          uri: data,
+          uri: `/api/hashsong/${number}`,
           isPlaying: true,
           index: 0,
           coverImage: meta[5],
