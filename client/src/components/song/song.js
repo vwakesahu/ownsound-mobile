@@ -10,6 +10,7 @@ import {
   ownSoundContractABI,
   ownSoundContractAddress,
 } from "@/utils/contract";
+import { RentAlert } from "./rent";
 
 const Song = ({ selectedLayout, setSelectedLayout }) => {
   const { authenticated, ready } = usePrivy();
@@ -285,7 +286,7 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
             <div className="border dark:border-none dark:bg-gray-800 bg-muted p-4 rounded-lg">
               <p className="text-foreground dark:text-gray-400">Rent Price</p>
               <p className="text-xl font-semibold text-pink-400">
-                {songDetails.rentPrice} ETH
+                {songDetails.rentPrice} MSX
               </p>
             </div>
           </div>
@@ -297,13 +298,7 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
           {songDetails.creator !== w0.address ? (
             <div className="flex items-center gap-3">
               {!isPurchased && songDetails.isRentable && (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="mt-6 border dark:text-white text-black font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl"
-                >
-                  Rent Now
-                </motion.button>
+                <RentAlert metadata={songDetails} />
               )}
               {!isPurchased && songDetails.isListed && (
                 <motion.button
