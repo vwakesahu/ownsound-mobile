@@ -158,7 +158,7 @@ const CreatePlaylistAlert = () => {
               <h4 className="text-sm font-medium text-gray-700">
                 Select Audio Tracks:
               </h4>
-              <div className="max-h-48 overflow-y-auto border border-gray-200 rounded-md bg-white">
+              <div className="max-h-48 overflow-y-auto overflow-x-hidden border border-gray-200 rounded-md bg-white">
                 {purchasedSongs.map((audio) => (
                   <motion.div
                     key={audio.id}
