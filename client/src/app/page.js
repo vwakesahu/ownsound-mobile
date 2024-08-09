@@ -29,7 +29,7 @@ const Page = () => {
         <main className="flex flex-col items-center gap-y-9">
           <div className="max-w-lg space-y-3.5 text-center">
             <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
-              Ownsound
+              OwnSound
             </h1>
             <p className="md:text-balance text-muted-foreground md:text-xl">
               Encypted Melodies Unlimited Possibilities. Leveraging MusicX,

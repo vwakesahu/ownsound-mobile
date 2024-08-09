@@ -154,7 +154,7 @@ export function ResizableComponent({
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <p className="">Own Sound</p>
+            <p className="">OwnSound</p>
           </motion.div>
           <AnimatePresence mode="wait">
             {isLoadingBalance ? (
