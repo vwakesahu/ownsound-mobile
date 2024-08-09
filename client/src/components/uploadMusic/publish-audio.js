@@ -160,7 +160,7 @@ const PublishAudio = ({ getSongs }) => {
       coverImage: imageSrc,
       mp3FileLocationId: value,
       isRentingAllowed: isRentingAllowed,
-      supply: 1,
+      supply: 100,
       royaltyPercentage: royaltyPercentage,
     };
 

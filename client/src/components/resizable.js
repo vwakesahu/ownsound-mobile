@@ -19,7 +19,12 @@ import { ContactAbhi } from "./contact-abhi";
 import { useSelector, useDispatch } from "react-redux";
 import { setMusicPlayer } from "@/redux/musicPlayerSlice";
 import { Contract } from "ethers";
-import { musicXContractABI, musicXContractAddress, ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
+import {
+  musicXContractABI,
+  musicXContractAddress,
+  ownSoundContractABI,
+  ownSoundContractAddress,
+} from "@/utils/contract";
 import { usePrivy } from "@privy-io/react-auth";
 import Loader from "./loader";
 import Song from "./song/song";
@@ -85,13 +90,13 @@ export function ResizableComponent({
         ownSoundContractABI,
         signer
       );
-      console.log('hdbs')
+      console.log("hdbs");
 
       const purchasedNFTs = await contract.getWalletPurchasedNFTs(w0.address);
       const songsPromises = purchasedNFTs.map((song) =>
         contract.nftMetadata(song)
       );
-      console.log(songsPromises)
+      console.log(songsPromises);
       const songs = await Promise.all(songsPromises);
 
       const formattedSongs = songs.map((song, index) => ({
@@ -541,7 +546,7 @@ const MusicList = ({
   setClickedIdx,
   handleSelectedMusicPlay,
 }) => {
-  console.log(purchasedSongs)
+  console.log(purchasedSongs);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
