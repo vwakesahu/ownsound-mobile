@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { Contract, ethers } from "ethers";
+import { Contract } from "ethers";
 import { ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import { Music, Loader2, PlayCircle, Pause } from "lucide-react";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setMusicPlayer } from "@/redux/musicPlayerSlice";
 import { Button } from "@/components/ui/button";
+import { truncateAddress } from "@/utils/truncateAddress";
 
 const MyMusic = () => {
   const [purchasedSongs, setPurchasedSongs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
+  const [imagesLoaded, setImagesLoaded] = useState({});
   const { authenticated, ready } = usePrivy();
   const { wallets } = useWallets();
   const w0 = wallets[0];
   const dispatch = useDispatch();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -130,39 +133,60 @@ const MyMusic = () => {
           <Loader2 className="animate-spin text-purple-500 w-8 h-8" />
         </div>
       ) : purchasedSongs.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-6">
           {purchasedSongs.map((song) => (
             <motion.div
               key={song.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-              whileHover={{ y: -5 }}
+              className="bg-white rounded-xl border overflow-hidden hover:shadow-xl transition-all duration-300"
+              whileHover={{ y: -5, scale: 1.02 }}
             >
-              <div className="relative pb-2/3">
+              <div className="aspect-w-1 aspect-h-1 relative">
+                {!imagesLoaded[song.id] && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                    <Loader2 className="animate-spin text-purple-500 w-10 h-10" />
+                  </div>
+                )}
+                {console.log(song)}
                 <img
                   src={song.image}
                   alt={song.title}
-                  className="absolute h-full w-full object-cover"
+                  className={`w-full h-full object-cover aspect-square transition-opacity duration-300 ${
+                    imagesLoaded[song.id] ? "opacity-100" : "opacity-0"
+                  }`}
+                  onLoad={() =>
+                    setImagesLoaded((prev) => ({ ...prev, [song.id]: true }))
+                  }
+                  onError={(e) => {
+                    console.error("Image load error:", e);
+                    e.target.onerror = null;
+                    e.target.src = "/path/to/default-image.jpg";
+                    setImagesLoaded((prev) => ({ ...prev, [song.id]: true }));
+                  }}
                 />
               </div>
-              <div className="p-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              <div className="p-3">
+                <h3 className="text-xl font-bold text-gray-800 mb-1 truncate">
                   {song.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-4">{song.description}</p>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  {song.description}
+                </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">ID: {song.id}</span>
+                  <span className="text-sm text-purple-600 font-medium">
+                    {truncateAddress(song.owner, 4, 4) || "Unknown Artist"}
+                  </span>
                   <Button
                     onClick={() => handlePlay(song)}
                     size="sm"
                     variant={
                       currentlyPlaying === song.id ? "default" : "outline"
                     }
-                    className="min-w-[40px]"
+                    className="rounded-full hover:bg-purple-100 hover:text-black transition-colors"
                   >
                     {currentlyPlaying === song.id ? (
-                      <Pause className="h-4 w-4" />
+                      <Pause className="h-5 w-5 text-white" />
                     ) : (
-                      <PlayCircle className="h-4 w-4" />
+                      <PlayCircle className="h-5 w-5 text-purple-700" />
                     )}
                   </Button>
                 </div>
