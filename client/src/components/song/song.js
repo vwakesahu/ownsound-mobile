@@ -11,6 +11,7 @@ import {
   ownSoundContractAddress,
 } from "@/utils/contract";
 import { RentAlert } from "./rent";
+import Loader from "../loader";
 
 const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
   const { authenticated, ready } = usePrivy();
@@ -203,7 +204,11 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
   };
 
   if (songDetailsLoading) {
-    return <div className="text-center mt-8">Loading song details...</div>;
+    return (
+      <div className="text-center mt-80 w-full grid place-items-center">
+        <Loader />
+      </div>
+    );
   }
 
   if (!songDetails) {
