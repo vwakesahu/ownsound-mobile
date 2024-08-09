@@ -17,6 +17,28 @@ const MyMusic = () => {
   const { wallets } = useWallets();
   const w0 = wallets[0];
   const dispatch = useDispatch();
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  };
 
   const getPurchasedSongs = async () => {
     try {
@@ -91,10 +113,18 @@ const MyMusic = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+    <motion.div
+      className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div
+        className="mt-10 scroll-m-20 mb-6 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background"
+        variants={itemVariants}
+      >
         Your Purchased Songs
-      </h1>
+      </motion.div>
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <Loader2 className="animate-spin text-purple-500 w-8 h-8" />
@@ -146,7 +176,7 @@ const MyMusic = () => {
           <p className="text-xl">You haven't purchased any songs yet.</p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
