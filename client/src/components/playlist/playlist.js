@@ -228,7 +228,10 @@ const Playlist = () => {
         className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background"
         variants={itemVariants}
       >
-        Your Playlist
+        {/* {console.log(playlist?.playlistame)} */}
+        {playlist && playlist.playlistame && playlist.playlistame.length > 0
+          ? playlist.playlistame[0]
+          : "Your Playlist"}
       </motion.div>
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <motion.div
@@ -240,9 +243,9 @@ const Playlist = () => {
           playlist.playlistame &&
           playlist.playlistame.length > 0 ? (
             <div>
-              <h2 className="text-3xl font-bold mb-6 text-center">
+              {/* <h2 className="text-3xl font-bold mb-6 text-center">
                 {playlist.playlistame[0]}
-              </h2>
+              </h2> */}
               {songs.length > 0 ? (
                 <div className="space-y-4">
                   {songs.map((song) => (
