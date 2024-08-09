@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/resizable";
 import Login from "./login";
 import { Badge } from "./ui/badge";
-import { ArrowLeftIcon, PauseIcon, PlayIcon } from "lucide-react";
+import { ArrowLeftIcon, MusicIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { audioTracks, playlists } from "@/utils/dummy";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,6 +26,7 @@ import Song from "./song/song";
 import HomePage from "./home-page";
 import { MdPlaylistAddCircle } from "react-icons/md";
 import Playlist from "./playlist/playlist";
+import MyMusic from "./mymusic/my-music";
 
 export function ResizableComponent({
   w0,
@@ -95,6 +96,7 @@ export function ResizableComponent({
     { name: "Explore", icon: CiGlobe },
     { name: "Profile", icon: User },
     { name: "Playlist", icon: MdPlaylistAddCircle },
+    { name: "My Songs", icon: MusicIcon },
   ];
   const handleClick = (item) => {
     setSelectedLayout(item.toLowerCase());
@@ -231,10 +233,17 @@ export function ResizableComponent({
             <Song
               selectedLayout={selectedLayout}
               setSelectedLayout={setSelectedLayout}
+              getMusicXTokenBalance={getMusicXTokenBalance}
             />
           )}
           {selectedLayout === "playlist" && (
             <Playlist
+              selectedLayout={selectedLayout}
+              setSelectedLayout={setSelectedLayout}
+            />
+          )}
+          {selectedLayout === "my songs" && (
+            <MyMusic
               selectedLayout={selectedLayout}
               setSelectedLayout={setSelectedLayout}
             />

@@ -1,6 +1,6 @@
 import { OWNSOUNDABI } from "@/abi/OwnSound";
 export const ownSoundContractAddress =
-  "0xE6865EFa4cEc1E6b82dc6a56d219d80855214E7D";
+  "0xaD4b216C20Ac6a06D67d03c8176C047BB81CB7A0";
 export const ownSoundContractABI = OWNSOUNDABI;
 
 import { MUSICXABI } from "@/abi/MusicX";

@@ -12,7 +12,7 @@ import {
 } from "@/utils/contract";
 import { RentAlert } from "./rent";
 
-const Song = ({ selectedLayout, setSelectedLayout }) => {
+const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
   const { authenticated, ready } = usePrivy();
   const { wallets } = useWallets();
   const [songDetailsLoading, setSongDetailsLoading] = useState(true);
@@ -78,6 +78,10 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
         rentStartTime: s[13],
       };
       console.log(rentDetails);
+      const parsedPrice = ethers.utils.parseEther(
+        parsedDetails.price.toString()
+      );
+      console.log(parsedPrice.toString());
 
       setSongDetails({ ...parsedDetails, rentPrice: rentDetails.rentPrice });
     } catch (error) {
@@ -173,6 +177,7 @@ const Song = ({ selectedLayout, setSelectedLayout }) => {
 
       // Refresh the song details after the purchase
       await getSongDetails(id);
+      await getMusicXTokenBalance();
       toast.success("NFT purchased successfully!");
     } catch (error) {
       console.error("Error buying NFT:", error);
