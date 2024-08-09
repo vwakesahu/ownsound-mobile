@@ -44,13 +44,13 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
       );
 
       const res = await contract.getNFTMetadata(id);
-      // console.log(res);
+      console.log(res);
 
       // Parse the response
       const parsedDetails = {
         id: res[0].toNumber(),
         isListed: res[1],
-        price: res[2].toNumber(),
+        price: res[0].toNumber(),
         name: res[3],
         description: res[4],
         imageUrl: res[5],
@@ -60,12 +60,18 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
         royaltyPercentage: res[9].toNumber(),
         creator: res[10],
         totalRents: res[11].toNumber(),
-        createdAt: new Date(res[12].toNumber() * 1000)
-          .toISOString()
-          .split("T")[0],
+        createdAt: new Date().toLocaleDateString(), //current date,
       };
 
+      console.log(parsedDetails);
+
       const rentTime = await contract.getRentableTokens();
+      if (rentTime.length === 0) {
+        console.log("No rentable tokens");
+        setSongDetails({ ...parsedDetails, rentPrice: 0 });
+        return;
+      }
+      console.log(rentTime);
       const s = rentTime[0][1];
       const rentDetails = {
         songName: s[3],
@@ -120,7 +126,7 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
       toast.error("Failed to fetch ownership information");
     }
   };
-
+  console.log(songId);
   useEffect(() => {
     if (ready && authenticated && w0?.address !== undefined) {
       getOwnershipInfo(songId);
@@ -177,7 +183,7 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
 
       // Refresh the song details after the purchase
       await getSongDetails(id);
-      await getMusicXTokenBalance();
+      // await getMusicXTokenBalance();
       toast.success("NFT purchased successfully!");
     } catch (error) {
       console.error("Error buying NFT:", error);

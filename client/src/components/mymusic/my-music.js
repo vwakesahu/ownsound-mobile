@@ -68,7 +68,7 @@ const MyMusic = () => {
 
   const handlePlay = (song) => {
     const number = Number(song.cid);
-    console.log(number)
+    console.log(number);
     dispatch(
       setMusicPlayer({
         uri: `/api/hashsong/${number}`,
@@ -92,7 +92,9 @@ const MyMusic = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Your Purchased Songs</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        Your Purchased Songs
+      </h1>
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <Loader2 className="animate-spin text-purple-500 w-8 h-8" />
@@ -113,14 +115,18 @@ const MyMusic = () => {
                 />
               </div>
               <div className="p-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{song.title}</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  {song.title}
+                </h3>
                 <p className="text-gray-600 text-sm mb-4">{song.description}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">ID: {song.id}</span>
                   <Button
                     onClick={() => handlePlay(song)}
                     size="sm"
-                    variant={currentlyPlaying === song.id ? "default" : "outline"}
+                    variant={
+                      currentlyPlaying === song.id ? "default" : "outline"
+                    }
                     className="min-w-[40px]"
                   >
                     {currentlyPlaying === song.id ? (

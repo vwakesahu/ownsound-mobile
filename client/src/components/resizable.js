@@ -19,7 +19,7 @@ import { ContactAbhi } from "./contact-abhi";
 import { useSelector, useDispatch } from "react-redux";
 import { setMusicPlayer } from "@/redux/musicPlayerSlice";
 import { Contract } from "ethers";
-import { musicXContractABI, musicXContractAddress } from "@/utils/contract";
+import { musicXContractABI, musicXContractAddress, ownSoundContractABI, ownSoundContractAddress } from "@/utils/contract";
 import { usePrivy } from "@privy-io/react-auth";
 import Loader from "./loader";
 import Song from "./song/song";
@@ -41,6 +41,7 @@ export function ResizableComponent({
   const musicPlayer = useSelector((state) => state.musicPlayer);
   const [musicXBalance, setMusicXBalance] = useState(0);
   const [isLoadingBalance, setIsLoadingBalance] = useState(true);
+  const [purchasedSongs, setPurchasedSongs] = useState([]);
 
   const getMusicXTokenBalance = async (address) => {
     setIsLoadingBalance(true);
@@ -71,12 +72,48 @@ export function ResizableComponent({
     }
   };
 
+  const getPurchasedSongs = async () => {
+    try {
+      const provider = await w0?.getEthersProvider();
+      if (!provider) throw new Error("Provider is not available");
+
+      const signer = await provider.getSigner();
+      if (!signer) throw new Error("Signer is not available");
+
+      const contract = new Contract(
+        ownSoundContractAddress,
+        ownSoundContractABI,
+        signer
+      );
+      console.log('hdbs')
+
+      const purchasedNFTs = await contract.getWalletPurchasedNFTs(w0.address);
+      const songsPromises = purchasedNFTs.map((song) =>
+        contract.nftMetadata(song)
+      );
+      console.log(songsPromises)
+      const songs = await Promise.all(songsPromises);
+
+      const formattedSongs = songs.map((song, index) => ({
+        id: purchasedNFTs[index].toString(),
+        title: song[3],
+        description: song[4],
+        image: song[5],
+        cid: song[12].toString(),
+      }));
+
+      setPurchasedSongs(formattedSongs);
+    } catch (error) {
+      console.error("Error fetching purchased songs:", error);
+    }
+  };
   useEffect(() => {
     if (ready && authenticated && w0?.address !== undefined) {
       console.log("Wallet Address: ", w0.address);
       getMusicXTokenBalance(w0.address);
+      getPurchasedSongs();
     }
-  }, [w0, ready, authenticated]);
+  }, [w0, ready, authenticated, selectedMode]);
 
   const handleSelectedMusicPlay = ({ title, artist, soundUri, cover }) => {
     dispatch(
@@ -277,7 +314,7 @@ export function ResizableComponent({
                 Playlists
               </Badge>
             </div>
-            <div className="">
+            <div className="h-[85vh] overflow-y-auto scrollbar-hide">
               {selectedMode === "playlists" ? (
                 <Playlists
                   playlists={playlists}
@@ -287,12 +324,13 @@ export function ResizableComponent({
                 />
               ) : (
                 <MusicList
-                  audioTracks={audioTracks}
+                  purchasedSongs={purchasedSongs}
                   clickedIdx={clickedIdx}
                   handleSelectedMusicPlay={handleSelectedMusicPlay}
                   setClickedIdx={setClickedIdx}
                 />
               )}
+              {/* {console.log(purchasedSongs)} */}
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -498,11 +536,12 @@ const Playlists = ({
 };
 
 const MusicList = ({
-  audioTracks,
+  purchasedSongs,
   clickedIdx,
   setClickedIdx,
   handleSelectedMusicPlay,
 }) => {
+  console.log(purchasedSongs)
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -533,75 +572,89 @@ const MusicList = ({
       initial="hidden"
       animate="visible"
     >
-      {audioTracks.map((track, index) => (
-        <motion.div
-          key={index}
-          variants={itemVariants}
-          whileHover={{ scale: 1.02 }}
-          className="flex w-full items-center justify-between p-4 hover:bg-muted rounded-md border"
-        >
-          <div className="w-full flex items-center gap-4">
-            <motion.img
-              src={track.cover}
-              alt="cover"
-              className="w-12 h-12 rounded-md"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            />
-            <div>
-              <motion.p
-                className="font-semibold"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                {track.title}
-              </motion.p>
-              <motion.p
-                className="text-sm text-gray-500"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                {track.artist}
-              </motion.p>
+      {purchasedSongs.length > 0 ? (
+        purchasedSongs.map((song, index) => (
+          <motion.div
+            key={song.id}
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="flex w-full items-center justify-between p-4 hover:bg-muted rounded-md border"
+          >
+            <div className="w-full flex items-center gap-4">
+              <motion.img
+                src={song.image}
+                alt={song.title}
+                className="w-12 h-12 rounded-md object-cover"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              />
+              <div>
+                <motion.p
+                  className="font-semibold"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  {song.title}
+                </motion.p>
+                <motion.p
+                  className="text-sm text-gray-500"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  {song.description}
+                </motion.p>
+              </div>
             </div>
-          </div>
-          <div className="grid place-items-center">
-            <motion.div
-              className="rounded-full p-1.5 bg-primary cursor-pointer"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => {
-                handleSelectedMusicPlay(track);
-                setClickedIdx(index);
-              }}
-            >
-              <AnimatePresence mode="wait">
-                {clickedIdx === index ? (
-                  <motion.div
-                    key="pause"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                  >
-                    <PauseIcon className="w-3 h-3 text-white" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="play"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                  >
-                    <PlayIcon className="w-3 h-3 text-white" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </div>
+            <div className="grid place-items-center">
+              <motion.div
+                className="rounded-full p-1.5 bg-primary cursor-pointer"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => {
+                  handleSelectedMusicPlay({
+                    title: song.title,
+                    artist: song.description,
+                    soundUri: `/api/hashsong/${Number(song.cid)}`,
+                    cover: song.image,
+                  });
+                  setClickedIdx(index);
+                }}
+              >
+                <AnimatePresence mode="wait">
+                  {clickedIdx === index ? (
+                    <motion.div
+                      key="pause"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                    >
+                      <PauseIcon className="w-3 h-3 text-white" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="play"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                    >
+                      <PlayIcon className="w-3 h-3 text-white" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </div>
+          </motion.div>
+        ))
+      ) : (
+        <motion.div
+          variants={itemVariants}
+          className="text-center text-gray-500 py-8"
+        >
+          No purchased songs found.
         </motion.div>
-      ))}
+      )}
     </motion.div>
   );
 };
