@@ -194,50 +194,88 @@ const Playlist = () => {
     return <div>Loading...</div>;
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
+    <motion.div
+      className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background"
+        variants={itemVariants}
       >
-        {playlist && playlist.playlistame && playlist.playlistame.length > 0 ? (
-          <div>
-            <h2 className="text-3xl font-bold mb-6 text-center">
-              {playlist.playlistame[0]}
-            </h2>
-            {songs.length > 0 ? (
-              <div className="space-y-4">
-                {songs.map((song) => (
-                  <SongItem
-                    key={song.tokenId}
-                    song={song}
-                    isPlaying={currentlyPlaying === song.tokenId}
-                    onPlay={handlePlay}
-                  />
-                ))}
-              </div>
-            ) : (
-              <p className="text-xl text-center text-gray-600">
-                No tracks in this playlist yet.
-              </p>
-            )}
-          </div>
-        ) : (
-          <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4">No Playlists Yet</h2>
-            <p className="text-xl text-gray-600 mb-4">
-              Create your first playlist to get started!
-            </p>
-            <p className="mb-8 max-w-md mx-auto text-gray-500">
-              Note: you can only create playlist when you have at least one
-              track purchased.
-            </p>
-            <CreatePlaylistAlert />
-          </div>
-        )}
+        Your Playlist
       </motion.div>
-    </div>
+      <div className="container mx-auto px-4 py-8 max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {playlist &&
+          playlist.playlistame &&
+          playlist.playlistame.length > 0 ? (
+            <div>
+              <h2 className="text-3xl font-bold mb-6 text-center">
+                {playlist.playlistame[0]}
+              </h2>
+              {songs.length > 0 ? (
+                <div className="space-y-4">
+                  {songs.map((song) => (
+                    <SongItem
+                      key={song.tokenId}
+                      song={song}
+                      isPlaying={currentlyPlaying === song.tokenId}
+                      onPlay={handlePlay}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xl text-center text-gray-600">
+                  No tracks in this playlist yet.
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="text-center">
+              <h2 className="text-3xl font-bold mb-4">No Playlists Yet</h2>
+              <p className="text-xl text-gray-600 mb-4">
+                Create your first playlist to get started!
+              </p>
+              <p className="mb-8 max-w-md mx-auto text-gray-500">
+                Note: you can only create playlist when you have at least one
+                track purchased.
+              </p>
+              <CreatePlaylistAlert />
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </motion.div>
   );
 };
 
