@@ -17,16 +17,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TmaSDKProvider>
-          <PrivyWrapper>
-            <ReduxProvider>
-              <ThemeProvider attribute="class" defaultTheme="light">
-                {children}
-                <Toaster />
-              </ThemeProvider>
-            </ReduxProvider>
-          </PrivyWrapper>
-        </TmaSDKProvider>
+        {/* <TmaSDKProvider> */}
+        <PrivyWrapper>
+          <ReduxProvider>
+            <ThemeProvider attribute="class" defaultTheme="light">
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </ReduxProvider>
+        </PrivyWrapper>
+        {/* </TmaSDKProvider> */}
       </body>
     </html>
   );
