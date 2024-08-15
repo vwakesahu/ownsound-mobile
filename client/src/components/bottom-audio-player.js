@@ -94,7 +94,7 @@ export default function BottomAudioPlayer({ url }) {
   console.log(url);
 
   return (
-    <div className="px-4 py-2 w-full flex items-center justify-between gap-3">
+    <div className=" w-full flex items-center justify-between gap-3">
       <audio key={url} ref={audioRef} src={url} />
 
       <div className="controls flex items-center gap-2">
@@ -123,7 +123,7 @@ export default function BottomAudioPlayer({ url }) {
         <span className="text-sm">{formatTime(duration)}</span>
       </div>
 
-      <div className="flex items-center gap-2">
+      {/* <div className="flex items-center gap-2">
         <FaShuffle
           // onClick={() => handleNext("shuffle")}
           className="cursor-pointer"
@@ -140,7 +140,7 @@ export default function BottomAudioPlayer({ url }) {
           // onClick={() => handleNext("repeat")}
           className="cursor-pointer"
         />
-      </div>
+      </div> */}
     </div>
   );
 }

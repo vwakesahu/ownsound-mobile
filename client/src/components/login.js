@@ -15,9 +15,9 @@ import { ModeToggle } from "@/theme/theme-toggle";
 const Login = ({ w0 }) => {
   const { login, authenticated, logout } = usePrivy();
   return (
-    <div className="p-6">
+    <div className="my-4">
       {authenticated ? (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <DropdownMenu className="w-full">
             <DropdownMenuTrigger className="w-full bg-primary rounded-md">
               <div className="py-2 flex items-center justify-between px-4 w-full">
@@ -37,7 +37,7 @@ const Login = ({ w0 }) => {
                 </div>
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="min-w-[18rem]">
+            <DropdownMenuContent className="min-w-[12rem]">
               <DropdownMenuItem>
                 <div
                   className="flex items-center justify-between w-full"

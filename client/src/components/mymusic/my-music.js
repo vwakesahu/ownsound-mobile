@@ -123,10 +123,10 @@ const MyMusic = () => {
       animate="visible"
     >
       <motion.div
-        className="mt-10 scroll-m-20 mb-6 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background"
+        className="scroll-m-20 border-b py-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 top-0 z-[40] bg-background w-full flex items-center justify-between"
         variants={itemVariants}
       >
-        Your Purchased Songs
+        Purchased Songs
       </motion.div>
       {isLoading ? (
         <div className="flex justify-center items-center h-64">

@@ -221,7 +221,7 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="scroll-m-20 border-b pb-4 pt-2 text-3xl font-semibold tracking-tight sticky top-0 z-[50] bg-background w-full flex items-center gap-4"
+        className="scroll-m-20 border-b py-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 top-0 z-[40] bg-background w-full flex items-center"
       >
         <div
           className="hover:bg-muted text-foreground p-1.5 cursor-pointer rounded-full"
@@ -264,7 +264,7 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
             <div className="border dark:border-none dark:bg-gray-800 bg-muted p-4 rounded-lg">
               <p className="text-foreground dark:text-gray-400">Price</p>
               <p className="text-2xl font-semibold text-green-400">
-                {songDetails.price} MSX
+               {songDetails.price} MSX
               </p>
             </div>
             <div className="border dark:border-none dark:bg-gray-800 bg-muted p-4 rounded-lg">

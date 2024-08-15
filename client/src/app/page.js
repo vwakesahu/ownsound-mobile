@@ -68,57 +68,58 @@ const Page = () => {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed w-full bottom-0 border-t p-4 bg-background backdrop-blur-xl grid grid-cols-3"
+        className="fixed w-full bottom-0 border-t p-4 bg-background backdrop-blur-xl"
       >
         <AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="flex gap-3 items-center z-50"
-          >
-            <motion.img
-              src={musicPlayer.coverImage || "/nft.avif"}
-              alt="cover"
-              className="w-12 h-12 rounded-md"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            />
-            <div>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="font-semibold"
-              >
-                {musicPlayer.title || "Yo! Click on music to play"}
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-sm"
-              >
-                {musicPlayer.artist || "Follow Qoneqt on instagram"}
-              </motion.p>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1 }}
-          className="w-[36rem] h-full"
-        >
-          <div>
-            <BottomAudioPlayer
-              url={musicPlayer.uri}
-              musicPlayer={musicPlayer}
-            />
+          <div className="grid grid-cols-8 gap-3">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="flex gap-3 items-center z-50 col-span-2"
+            >
+              <motion.img
+                src={musicPlayer.coverImage || "/nft.avif"}
+                alt="cover"
+                className="w-16 h-16 rounded-md"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
+              className="h-full w-full col-span-4 flex flex-col justify-between"
+            >
+              <div>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="font-semibold text-sm"
+                >
+                  {musicPlayer.title || "Chin tapak dam dam"}
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-xs w-full text-muted-foreground"
+                >
+                  {musicPlayer.artist || "Follow Qoneqt"}
+                </motion.p>
+              </div>
+              <div>
+                <BottomAudioPlayer
+                  url={musicPlayer.uri}
+                  musicPlayer={musicPlayer}
+                />
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
-        <div></div>
+        </AnimatePresence>
       </motion.div>
     </div>
   );

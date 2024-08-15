@@ -32,6 +32,7 @@ import HomePage from "./home-page";
 import { MdPlaylistAddCircle } from "react-icons/md";
 import Playlist from "./playlist/playlist";
 import MyMusic from "./mymusic/my-music";
+import { SheetDemo } from "./navSheet";
 
 export function ResizableComponent({
   w0,
@@ -145,202 +146,189 @@ export function ResizableComponent({
   };
 
   return (
-    <ResizablePanelGroup direction="horizontal">
-      <ResizablePanel defaultSize={50}>
-        <motion.div
-          className="w-full p-6 dark:bg-muted/10 bg-muted border-b flex items-center justify-between"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+    <div className="">
+      <div className="">
+        <div className="fixed top-0 w-full z-[50] grid h-16 px-6 bg-muted border-b">
           <motion.div
-            className="flex items-center gap-3"
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
+            className="w-full flex items-center justify-between"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            <p className="">OwnSound</p>
-          </motion.div>
-          <AnimatePresence mode="wait">
-            {isLoadingBalance ? (
-              <motion.div
-                key="loader"
-                className="grid items-center justify-end"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="flex">
-                  <Loader noWidth={true} />
-                </div>
-              </motion.div>
-            ) : musicXBalance <= 0 ? (
-              <motion.div
-                key="contact"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ContactAbhi />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="balance"
-                className="flex items-center gap-2 font-semibold text-primary"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <motion.p
-                  className="text-primary"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  {musicXBalance === "0" ? "0" : musicXBalance.slice(0, -18)}
-                </motion.p>
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-                >
-                  <Image
-                    src={"/icons/token-coin.svg"}
-                    width={25}
-                    height={25}
-                    alt="coin"
-                  />
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-        <motion.div
-          className="flex flex-col space-y-6 p-4 mt-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, staggerChildren: 0.1 }}
-        >
-          {menuItems.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <motion.div
-                key={item.name}
-                className={`flex items-center space-x-2 cursor-pointer transition-transform transform ${
-                  selectedLayout === item.name.toLowerCase()
-                    ? "text-primary"
-                    : "text-muted-foreground"
-                }`}
-                onClick={() => handleClick(item.name)}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Icon className="h-6 w-6" />
-                <span>{item.name}</span>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </ResizablePanel>
-
-      <ResizableHandle />
-      <ResizablePanel defaultSize={120}>
-        <div className="p-6">
-          {selectedLayout === "home" && (
-            <div className="mt-10">
-              <HomePage />
-            </div>
-          )}
-          {selectedLayout === "song" && (
-            <div className="h-full flex items-center justify-center mt-10">
-              <img
-                src={musicPlayer.coverImage || "/nft.avif"}
-                width={600}
-                height={600}
-                className="rounded-lg drop-shadow-md aspect-square"
+            <motion.div
+              className="flex items-center gap-3"
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <p className="">OwnSound</p>
+            </motion.div>
+            <div className="flex items-center gap-3">
+              <AnimatePresence mode="wait">
+                {isLoadingBalance ? (
+                  <motion.div
+                    key="loader"
+                    className="grid items-center justify-end"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="flex">
+                      <Loader noWidth={true} />
+                    </div>
+                  </motion.div>
+                ) : musicXBalance <= 0 ? (
+                  <motion.div
+                    key="contact"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ContactAbhi />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="balance"
+                    className="flex items-center gap-2 font-semibold text-primary"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <motion.p
+                      className="text-primary"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      {musicXBalance === "0"
+                        ? "0"
+                        : musicXBalance.slice(0, -18)}
+                    </motion.p>
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{
+                        delay: 0.4,
+                        type: "spring",
+                        stiffness: 200,
+                      }}
+                    >
+                      <Image
+                        src={"/icons/token-coin.svg"}
+                        width={25}
+                        height={25}
+                        alt="coin"
+                      />
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <SheetDemo
+                handleClick={handleClick}
+                menuItems={menuItems}
+                selectedLayout={selectedLayout}
+                w0={w0}
               />
             </div>
-          )}
-          {selectedLayout === "profile" && <Profile />}
-          {selectedLayout === "explore" && (
-            <Explore setSelectedLayout={setSelectedLayout} w0={w0} />
-          )}
-          {selectedLayout.includes("view-song") && (
-            <Song
-              selectedLayout={selectedLayout}
-              setSelectedLayout={setSelectedLayout}
-              getMusicXTokenBalance={getMusicXTokenBalance}
-            />
-          )}
-          {selectedLayout === "playlist" && (
-            <Playlist
-              selectedLayout={selectedLayout}
-              setSelectedLayout={setSelectedLayout}
-            />
-          )}
-          {selectedLayout === "my songs" && (
-            <MyMusic
-              selectedLayout={selectedLayout}
-              setSelectedLayout={setSelectedLayout}
-            />
-          )}
+          </motion.div>
         </div>
-      </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel defaultSize={50}>
-        <ResizablePanelGroup direction="vertical">
-          <ResizablePanel defaultSize={75}>
-            <Login w0={w0} />
-            <div className="p-6 flex items-center gap-4">
-              <Badge
-                className={
-                  selectedMode === "songs"
-                    ? "bg-primary text-white cursor-pointer"
-                    : "bg-transparent text-foreground hover:bg-muted cursor-pointer"
-                }
-                onClick={() => setSelectedMode("songs")}
-              >
-                Songs
-              </Badge>
-              <Badge
-                className={
-                  selectedMode === "playlists"
-                    ? "bg-primary text-white cursor-pointer"
-                    : "bg-transparent text-foreground hover:bg-muted cursor-pointer"
-                }
-                onClick={() => setSelectedMode("playlists")}
-              >
-                Playlists
-              </Badge>
-            </div>
-            <div className="h-[85vh] overflow-y-auto scrollbar-hide">
-              {selectedMode === "playlists" ? (
-                <Playlists
-                  playlists={playlists}
-                  clickedIdx={clickedIdx}
-                  handleSelectedMusicPlay={handleSelectedMusicPlay}
-                  setClickedIdx={setClickedIdx}
+      </div>
+
+      <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel defaultSize={120} className={"pt-10"}>
+          <div className="p-6">
+            {selectedLayout === "home" && (
+              <div className="mt-10">
+                <HomePage />
+              </div>
+            )}
+            {selectedLayout === "song" && (
+              <div className="h-full flex items-center justify-center mt-10">
+                <img
+                  src={musicPlayer.coverImage || "/nft.avif"}
+                  width={600}
+                  height={600}
+                  className="rounded-lg drop-shadow-md aspect-square"
                 />
-              ) : (
-                <MusicList
-                  purchasedSongs={purchasedSongs}
-                  clickedIdx={clickedIdx}
-                  handleSelectedMusicPlay={handleSelectedMusicPlay}
-                  setClickedIdx={setClickedIdx}
-                />
-              )}
-              {/* {console.log(purchasedSongs)} */}
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+              </div>
+            )}
+            {selectedLayout === "profile" && <Profile />}
+            {selectedLayout === "explore" && (
+              <Explore setSelectedLayout={setSelectedLayout} w0={w0} />
+            )}
+            {selectedLayout.includes("view-song") && (
+              <Song
+                selectedLayout={selectedLayout}
+                setSelectedLayout={setSelectedLayout}
+                getMusicXTokenBalance={getMusicXTokenBalance}
+              />
+            )}
+            {selectedLayout === "playlist" && (
+              <Playlist
+                selectedLayout={selectedLayout}
+                setSelectedLayout={setSelectedLayout}
+              />
+            )}
+            {selectedLayout === "my songs" && (
+              <MyMusic
+                selectedLayout={selectedLayout}
+                setSelectedLayout={setSelectedLayout}
+              />
+            )}
+          </div>
+        </ResizablePanel>
+        {/* <ResizableHandle />
+    <ResizablePanel defaultSize={50}>
+      <ResizablePanelGroup direction="vertical">
+        <ResizablePanel defaultSize={75}>
+          <Login w0={w0} />
+          <div className="p-6 flex items-center gap-4">
+            <Badge
+              className={
+                selectedMode === "songs"
+                  ? "bg-primary text-white cursor-pointer"
+                  : "bg-transparent text-foreground hover:bg-muted cursor-pointer"
+              }
+              onClick={() => setSelectedMode("songs")}
+            >
+              Songs
+            </Badge>
+            <Badge
+              className={
+                selectedMode === "playlists"
+                  ? "bg-primary text-white cursor-pointer"
+                  : "bg-transparent text-foreground hover:bg-muted cursor-pointer"
+              }
+              onClick={() => setSelectedMode("playlists")}
+            >
+              Playlists
+            </Badge>
+          </div>
+          <div className="h-[85vh] overflow-y-auto scrollbar-hide">
+            {selectedMode === "playlists" ? (
+              <Playlists
+                playlists={playlists}
+                clickedIdx={clickedIdx}
+                handleSelectedMusicPlay={handleSelectedMusicPlay}
+                setClickedIdx={setClickedIdx}
+              />
+            ) : (
+              <MusicList
+                purchasedSongs={purchasedSongs}
+                clickedIdx={clickedIdx}
+                handleSelectedMusicPlay={handleSelectedMusicPlay}
+                setClickedIdx={setClickedIdx}
+              />
+            )}
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </ResizablePanel> */}
+      </ResizablePanelGroup>
+    </div>
   );
 }
 
