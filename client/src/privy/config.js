@@ -5,9 +5,9 @@ export const privyConfig = {
   config: {
     logo: "https://your.logo.url",
     appearance: { theme: "dark" },
-    loginMethods: ["email"],
+    loginMethods: ["wallet"],
     appearance: {
-      // walletList: ["metamask", "detected_wallets", "rainbow"],
+      walletList: ["metamask", "detected_wallets", "rainbow"],
       theme: "dark",
     },
     defaultChain: polygonAmoy,
