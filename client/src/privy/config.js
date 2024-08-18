@@ -8,6 +8,7 @@ export const privyConfig = {
     loginMethods: ["email", "wallet"],
     appearance: {
       walletList: ["metamask", "detected_wallets", "rainbow"],
+      walletList: ["metamask", "detected_wallets", "rainbow"],
       theme: "dark",
     },
     defaultChain: polygonAmoy,
