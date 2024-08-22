@@ -1,7 +1,7 @@
 import { polygonAmoy } from "./chains";
 
 export const privyConfig = {
-  appId: "clz007cw406bz3iq8dwolge41",
+  appId: "cm00s5izi0007itpy18u8vvtl",
   config: {
     logo: "https://your.logo.url",
     appearance: { theme: "dark" },
