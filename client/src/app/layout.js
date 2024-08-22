@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <TmaSDKProvider> */}
+        <TmaSDKProvider>
           <PrivyWrapper>
             <ReduxProvider>
               <ThemeProvider attribute="class" defaultTheme="light">
@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
               </ThemeProvider>
             </ReduxProvider>
           </PrivyWrapper>
-        {/* </TmaSDKProvider> */}
+        </TmaSDKProvider>
       </body>
     </html>
   );
