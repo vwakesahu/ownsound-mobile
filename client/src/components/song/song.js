@@ -12,6 +12,7 @@ import {
 } from "@/utils/contract";
 import { RentAlert } from "./rent";
 import Loader from "../loader";
+import { AlertDemo } from "../note";
 
 const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
   const { authenticated, ready } = usePrivy();
@@ -232,6 +233,10 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
         Song Details
       </motion.div>
 
+      <div>
+        <AlertDemo />
+      </div>
+
       <div className="flex flex-col md:flex-row gap-8 px-4 md:px-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -264,7 +269,7 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
             <div className="border dark:border-none dark:bg-gray-800 bg-muted p-4 rounded-lg">
               <p className="text-foreground dark:text-gray-400">Price</p>
               <p className="text-2xl font-semibold text-green-400">
-               {songDetails.price} MSX
+                {songDetails.price} MSX
               </p>
             </div>
             <div className="border dark:border-none dark:bg-gray-800 bg-muted p-4 rounded-lg">

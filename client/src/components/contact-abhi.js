@@ -48,7 +48,7 @@ export function ContactAbhi({ getMusicXTokenBalance, w0, setFetch }) {
             <Loader noWidth={true} />
           </div>
         ) : (
-          "Need MCX ?"
+          "Claim MCX ?"
         )}
       </Button>
     </>
