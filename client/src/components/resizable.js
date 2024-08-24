@@ -48,7 +48,7 @@ export function ResizableComponent({
   const [musicXBalance, setMusicXBalance] = useState(0);
   const [isLoadingBalance, setIsLoadingBalance] = useState(true);
   const [purchasedSongs, setPurchasedSongs] = useState([]);
-
+  const [fetch, setFetch] = useState("");
   const getMusicXTokenBalance = async (address) => {
     setIsLoadingBalance(true);
     try {
@@ -119,7 +119,8 @@ export function ResizableComponent({
       getMusicXTokenBalance(w0.address);
       getPurchasedSongs();
     }
-  }, [w0, ready, authenticated, selectedMode]);
+  }, [w0, ready, authenticated, selectedMode, fetch]);
+  console.log(fetch);
 
   const handleSelectedMusicPlay = ({ title, artist, soundUri, cover }) => {
     dispatch(
@@ -186,7 +187,11 @@ export function ResizableComponent({
                     exit={{ opacity: 0, y: 20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <ContactAbhi />
+                    <ContactAbhi
+                      getMusicXTokenBalance={getMusicXTokenBalance}
+                      w0={w0}
+                      setFetch={setFetch}
+                    />
                   </motion.div>
                 ) : (
                   <motion.div
