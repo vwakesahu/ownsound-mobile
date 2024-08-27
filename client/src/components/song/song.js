@@ -12,7 +12,6 @@ import {
 } from "@/utils/contract";
 import { RentAlert } from "./rent";
 import Loader from "../loader";
-import { AlertDemo } from "../note";
 
 const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
   const { authenticated, ready } = usePrivy();
@@ -222,7 +221,7 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="scroll-m-20 border-b py-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 top-0 z-[40] bg-background w-full flex items-center"
+        className="scroll-m-20 border-b pb-4 pt-2 text-3xl font-semibold tracking-tight sticky top-0 z-[50] bg-background w-full flex items-center gap-4"
       >
         <div
           className="hover:bg-muted text-foreground p-1.5 cursor-pointer rounded-full"
@@ -232,10 +231,6 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
         </div>
         Song Details
       </motion.div>
-
-      <div>
-        <AlertDemo />
-      </div>
 
       <div className="flex flex-col md:flex-row gap-8 px-4 md:px-8">
         <motion.div

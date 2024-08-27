@@ -115,13 +115,13 @@ const Explore = ({ setSelectedLayout, w0 }) => {
 
   return (
     <motion.div
-      className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide"
+      className="w-full flex flex-col gap-6 pb-32 h-[85vh] overflow-y-auto scrollbar-hide mt-2"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <motion.div
-        className="scroll-m-20 border-b py-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 top-0 z-[40] bg-background w-full flex items-center justify-between"
+        className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 sticky top-0 z-[50] bg-background w-full flex items-center justify-between"
         variants={itemVariants}
       >
         Explore
@@ -134,7 +134,6 @@ const Explore = ({ setSelectedLayout, w0 }) => {
             type="text"
             placeholder="Search..."
             value={searchQuery}
-            className='w-32'
             onChange={handleSearchChange}
           />
         </motion.div>

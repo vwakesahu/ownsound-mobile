@@ -1,9 +1,9 @@
 import { OWNSOUNDABI } from "@/abi/OwnSound";
 export const ownSoundContractAddress =
-  "0xaD4b216C20Ac6a06D67d03c8176C047BB81CB7A0";
+  "0xeCC4bA1B43Ff380d0cC6770787E38E0f13CfFcC8";
 export const ownSoundContractABI = OWNSOUNDABI;
 
 import { MUSICXABI } from "@/abi/MusicX";
 export const musicXContractAddress =
-  "0x9b344Cc9f7Bfa905cc6eBCF87AbC03338785b70B";
+  "0x4ca96702F0e9B9c0dfEFD6aA5B7279B83852096c";
 export const musicXContractABI = MUSICXABI;

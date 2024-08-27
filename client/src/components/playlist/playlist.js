@@ -225,7 +225,7 @@ const Playlist = () => {
       animate="visible"
     >
       <motion.div
-        className="scroll-m-20 border-b py-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 top-0 z-[40] bg-background w-full flex items-center justify-between"
+        className="mt-10 scroll-m-20 border-b pb-4 text-3xl font-semibold tracking-tight transition-colors first:mt-0 w-full flex items-center justify-between sticky top-0 z-50 bg-background"
         variants={itemVariants}
       >
         {/* {console.log(playlist?.playlistame)} */}
