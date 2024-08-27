@@ -3,7 +3,7 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 
 const HomePage = () => {
   const [homeImage, setHomeImage] = useState(
-    "https://images.tv9hindi.com/wp-content/uploads/2024/08/chin-tapak-dum-dum-1.png"
+    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBZt2YBSmxN7krdwl6frgJBYy8VtzZ7qc3ArI699XAiKKKkEc70ZcfvI79qSogdOmiDOqEkAWdFQazdN4vHPHU8_rSKbSzo3gpNwYfWFBHRJqQB4XY6ThgaymLbzNgCUHNTKyx_OvaDgIa6tk24WrmeWXaaRMmU6SGMoXbSccgSgIDDXmGQ4ovierAVCg/s1600/crypto%20girl.jpg"
   );
   const [imageAspectRatio, setImageAspectRatio] = useState(16 / 9);
 
