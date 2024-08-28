@@ -44,7 +44,7 @@ export function RentAlert({ metadata, songId, isowner }) {
       );
 
       const res = await contract.setRentInfo(tokenId, rentPrice, rentDuration, {
-        gasLimit: 700000,
+        gasLimit: 1000000,
       });
       await res.wait();
       console.log("Rent set successfully:", res);
@@ -76,7 +76,7 @@ export function RentAlert({ metadata, songId, isowner }) {
         // Assuming there's a rentNFT function in the contract
         const res = await contract.rentNFT(tokenId, {
           value: rentPrice,
-          gasLimit: 700000,
+          gasLimit: 1000000,
         });
         await res.wait();
         console.log("NFT rentInfo updated successfully:", res);
@@ -85,7 +85,7 @@ export function RentAlert({ metadata, songId, isowner }) {
         // Assuming there's a rentNFT function in the contract
         const res = await contract.rentNFT(tokenId, {
           //   value: metadata.rentPrice,
-          gasLimit: 700000,
+          gasLimit: 1000000,
         });
         await res.wait();
         console.log("NFT rented successfully:", res);

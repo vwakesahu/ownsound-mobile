@@ -172,14 +172,14 @@ const Song = ({ selectedLayout, setSelectedLayout, getMusicXTokenBalance }) => {
         const approveTx = await contract1.approve(
           ownSoundContractAddress,
           ethers.utils.parseEther(songDetails.price.toString()),
-          { gasLimit: 300000 }
+          { gasLimit: 1000000 }
         );
         await approveTx.wait(1);
         setApprovalLoading(false);
       }
 
       // After approval, buy the NFT
-      const txn = await contract.buyNFT(id, { gasLimit: 300000 });
+      const txn = await contract.buyNFT(id, { gasLimit: 1000000 });
       await txn.wait(1);
 
       // Refresh the song details after the purchase
