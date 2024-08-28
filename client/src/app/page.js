@@ -32,8 +32,7 @@ const Page = () => {
               OwnSound
             </h1>
             <p className="md:text-balance text-muted-foreground md:text-xl">
-              Encrypted Melodies Unlimited Possibilities. Leveraging MusicX,
-              Polygon, Inco & The Graph.
+              Encrypted Melodies Unlimited Possibilities. Leveraging Open Campus Codex, MusicX, Inco & The Graph.
             </p>
           </div>
           <div className="flex items-center gap-3.5">
